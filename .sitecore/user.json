@@ -1,0 +1,14 @@
+{
+  "endpoints": {
+    "default": {
+      "allowWrite": true,
+      "host": "https://cm.vraves.localhost/",
+      "authority": "https://id.vraves.localhost/",
+      "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjIwRkRENjJCRDhFRDg0QkQ5OTkzOTNENjY5Q0Y1QTNFMEFFMDY0QURSUzI1NiIsInR5cCI6ImF0K2p3dCIsIng1dCI6IklQM1dLOWp0aEwyWms1UFdhYzlhUGdyZ1pLMCJ9.eyJuYmYiOjE2NjI5MzQ2ODMsImV4cCI6MTY2MjkzODI4MywiaXNzIjoiaHR0cHM6Ly9pZC52cmF2ZXMubG9jYWxob3N0IiwiYXVkIjpbInNpdGVjb3JlLnByb2ZpbGUuYXBpIiwiaHR0cHM6Ly9pZC52cmF2ZXMubG9jYWxob3N0L3Jlc291cmNlcyJdLCJjbGllbnRfaWQiOiJEZXZpY2UiLCJzdWIiOiJjNDNhNTE3ZTkxODI0ZmU0YjRhNjBlMWYxM2M0ZjE1NSIsImF1dGhfdGltZSI6MTY2MjkzNDY3OSwiaWRwIjoibG9jYWwiLCJuYW1lIjoic2l0ZWNvcmVcXEFkbWluIiwiZW1haWwiOiIiLCJodHRwOi8vd3d3LnNpdGVjb3JlLm5ldC9pZGVudGl0eS9jbGFpbXMvaXNBZG1pbiI6IlRydWUiLCJqdGkiOiJFQjQ5NDk2RjlCODlBMUVERTMxMjZFMEZCREMyOTdBMCIsInNpZCI6IkY2QkQ4MkJEQ0Q5OURBMUMyOTc0ODNDNUM4Q0M3QzIwIiwiaWF0IjoxNjYyOTM0NjgzLCJzY29wZSI6WyJzaXRlY29yZS5wcm9maWxlLmFwaSIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJwd2QiXX0.vnlz4edtuEYVtE1hOTkTsPmm06HRcXkwzt2nlofp3tDjYIX5s4X3m3bNFjOIEaYzAeu5yuMnNxc8K_Z-sL2vMnAnFY-YY5e8bvZJkcDzyWfH8xdquVMjg_NmwgIzmZ168EzeUllQ2xcY5R442Uw3NrFEV3X7ZmHL7ZxqGyR8TFg-45xpjKGb5c1l0LjzWtQ8CcW6DPuE4yAKywThEPJFWu9nOthwX5Sok6fs533WYMryh3C1L9P6hR7ARZpuuEe9-EpzQqeCvkRp_IDcnH8L4m_9rBlq2MPp6IaYJPFI4RG6MZ_ebvdARX6UsypTIZbdb23NJ-kQjnqiav3jVIZ4fg",
+      "refreshToken": "4F05BB7BD7D9C2BB830F78A4E0FD36194274161AB29EEB3E1F85A6653A3BFCFB",
+      "clientId": "Device",
+      "variables": {}
+    }
+  },
+  "$schema": "./schemas/UserConfiguration.schema.json"
+}
