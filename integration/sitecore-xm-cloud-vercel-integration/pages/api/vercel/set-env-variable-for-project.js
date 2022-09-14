@@ -4,7 +4,7 @@
  * Our `code` is only valid for one request. If we call it more then once,
  * we get "Invalid grant: authorization code is invalid".
  */
- export default async function getEnvVariableForProject(req, res) {
+ export default async function setEnvVariableForProject(req, res) {
   const projectId = req.query.projectId;
   const envId = req.query.environmentId;
   const variableKey = req.query.variableKey;
