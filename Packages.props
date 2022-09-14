@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  These props are used by Central Package Versions to ensure consistent NuGet
+  package versions in your Visual Studio projects.
+  https://github.com/microsoft/MSBuildSdks/tree/master/src/CentralPackageVersions
+-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PlatformVersion>10.2.0</PlatformVersion>
+    <PlatformVersion>1.*</PlatformVersion>
+    <SitecoreAspNetVersion>20.0.*</SitecoreAspNetVersion>
+    <DotNetVersion>6.0.0</DotNetVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Update="Sitecore.Kernel" Version="$(PlatformVersion)" />
-    <PackageReference Update="Sitecore.Mvc" Version="$(PlatformVersion)" />
-    <PackageReference Update="Sitecore.ContentSearch" Version="$(PlatformVersion)" />
-    <PackageReference Update="Sitecore.ContentSearch.Linq" Version="$(PlatformVersion)" />
-    <PackageReference Update="Sitecore.ContentSearch.ContentExtraction" Version="$(PlatformVersion)" />
-    <PackageReference Update="Sitecore.Assemblies.Platform" Version="$(PlatformVersion)" />
+    <!-- Platform -->
+    <PackageReference Update="Sitecore.XmCloud.Kernel" Version="$(PlatformVersion)" />
+    <PackageReference Update="Sitecore.XmCloud.ContentSearch" Version="$(PlatformVersion)" />
+    <PackageReference Update="Sitecore.XmCloud.ContentSearch.Linq" Version="$(PlatformVersion)" />
+    <PackageReference Update="Sitecore.XmCloud.LayoutService" Version="$(PlatformVersion)" />
+    <PackageReference Update="Sitecore.XmCloud.Assemblies" Version="$(PlatformVersion)" />
+    <PackageReference Update="Sitecore.Assemblies.SitecoreHeadlessServicesServer" Version="19.*" />
+
+    <!-- Rendering Host -->
+    <PackageReference Update="BuildWebCompiler" Version="1.12.405" />
+    <PackageReference Update="GraphQL.Client" Version="4.0.2" />
+    <PackageReference Update="GraphQL.Client.Serializer.Newtonsoft" Version="4.0.2" />
+    <PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(DotNetVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(DotNetVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Http" Version="$(DotNetVersion)"/>
+    <PackageReference Update="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(DotNetVersion)" />
+    <PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
+    <PackageReference Update="System.ServiceModel.Syndication" Version="$(DotNetVersion)" />
+    <PackageReference Update="Sitecore.LayoutService.Client" Version="$(SitecoreAspNetVersion)" />
+    <PackageReference Update="Sitecore.AspNet.RenderingEngine" Version="$(SitecoreAspNetVersion)" />
+    <PackageReference Update="Sitecore.AspNet.ExperienceEditor" Version="$(SitecoreAspNetVersion)" />
+    <PackageReference Update="Okta.AspNetCore" Version="4.2.0" />
     
-    <PackageReference Update="Unicorn" Version="4.1.6" />
-    <PackageReference Update="Unicorn.Roles" Version="4.1.6" />
-    <PackageReference Update="Unicorn.Users" Version="4.1.6" />
-    <PackageReference Update="Sitecore.FakeDb" Version="3.0.0-alpha1" />
-    <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Update="Microsoft.Extensions.Logging" Version="2.2.0" />
-    <PackageReference Update="Moq" Version="4.17.2" />
-    <PackageReference Update="xunit" Version="2.4.1" />
-    <PackageReference Update="xunit.runner.visualstudio" Version="2.4.3" />
-    <PackageReference Update="RichardSzalay.Helix.Publishing.WebRoot" Version="1.5.6" />
   </ItemGroup>
 </Project>
