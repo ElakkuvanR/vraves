@@ -127,7 +127,7 @@ export default async function createXMCloudEnv(req, res) {
     .promise()
     .then(
       (result) => {
-        accessToken = res.status(200).json(result.success);
+        accessToken = result.success;
       },
       (err) => {
         console.error(err);
