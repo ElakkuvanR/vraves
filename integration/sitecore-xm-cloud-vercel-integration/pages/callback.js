@@ -12,7 +12,7 @@ export default function CallbackPage() {
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
-      const res = await fetch(`/api/get-access-token?code=${code}`)
+      const res = await fetch(`/api/vercel/get-access-token?code=${code}`)
       const json = await res.json()
 
       setData({
