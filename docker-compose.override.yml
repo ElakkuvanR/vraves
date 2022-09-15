@@ -1,5 +1,3 @@
-version: "2.4"
-
 services:
 
   nodejs:
@@ -11,140 +9,164 @@ services:
         NODEJS_VERSION: ${NODEJS_VERSION}
     scale: 0
 
-  solution:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
+  sugconeu:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-sugcon-eu:${VERSION:-latest}
     build:
-      context: .
-      args:
-        BASE_IMAGE: ${SOLUTION_BASE_IMAGE}
-        BUILD_IMAGE: ${SOLUTION_BUILD_IMAGE}
-        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
-    scale: 0
-  
-  rendering:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-rendering:${VERSION:-latest}
-    build:
-      context: ./docker/build/rendering
+      context: ./docker/build/sugcon/sugcon-eu
       target: ${BUILD_CONFIGURATION}
       args:
         PARENT_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-nodejs:${VERSION:-latest}
     volumes:
-      - .\src\Project\VRaves\vraves:C:\app
+      - .\src\Project\Sugcon\SugconEuSxa:C:\app
     environment:
-      SITECORE_API_HOST: "http://cd"
+      SITECORE_API_HOST: "http://cm"
       NEXTJS_DIST_DIR: ".next-container"
-      PUBLIC_URL: "https://${RENDERING_HOST}"
+      PUBLIC_URL: "https://${SUGCON_EU_HOST}"
       JSS_EDITING_SECRET: ${JSS_EDITING_SECRET}
+      SITECORE_API_KEY: "${SITECORE_API_KEY}"
+      FETCH_WITH: "GraphQL"
     depends_on:
       - cm
       - nodejs
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.rendering-secure.entrypoints=websecure"
-      - "traefik.http.routers.rendering-secure.rule=Host(`${RENDERING_HOST}`)"
+      - "traefik.http.routers.rendering-secure.rule=Host(`${SUGCON_EU_HOST}`)"
       - "traefik.http.routers.rendering-secure.tls=true"
+  
+  sugconanz:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-sugcon-anz:${VERSION:-latest}
+    build:
+      context: ./docker/build/sugcon/sugcon-anz
+      target: ${BUILD_CONFIGURATION}
+      args:
+        PARENT_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-nodejs:${VERSION:-latest}
+    volumes:
+      - .\src\Project\Sugcon\SugconAnzSxa:C:\app
+    environment:
+      SITECORE_API_HOST: "http://cm"
+      NEXTJS_DIST_DIR: ".next-container"
+      PUBLIC_URL: "https://${SUGCON_ANZ_HOST}"
+      JSS_EDITING_SECRET: ${JSS_EDITING_SECRET}
+      SITECORE_API_KEY: "${SUGCONANZ_API_KEY}"
+      FETCH_WITH: "GraphQL"
+    depends_on:
+      - cm
+      - nodejs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sugconanz-secure.entrypoints=websecure"
+      - "traefik.http.routers.sugconanz-secure.rule=Host(`${SUGCON_ANZ_HOST}`)"
+      - "traefik.http.routers.sugconanz-secure.tls=true"
+
+  # The solution build image is added here so it can be referenced as a build dependency
+  # for the images which use its output. Setting "scale: 0" means docker-compose will not
+  # include it in the running environment. See Dockerfile for more details.
+  solution:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
+    build:
+      context: .
+      dockerfile: ./docker/build/solution/Dockerfile
+      args:
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
+        BUILD_IMAGE: ${SOLUTION_BUILD_IMAGE}
+        BASE_IMAGE: ${SOLUTION_BASE_IMAGE}
+    scale: 0
+
+  # Container used to run the MVP Rendering host.
+  mvp-rendering:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-mvp-rendering:${VERSION:-latest}
+    restart: ${DOCKER_RESTART}
+    build:
+      context: ./docker/build/rendering
+      target: ${BUILD_CONFIGURATION}
+      args:
+        DEBUG_BASE_IMAGE: ${NETCORE_BUILD_IMAGE}
+        RELEASE_BASE_IMAGE: ${NETCORE_RELEASE_IMAGE}
+        SOLUTION_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
+        ENTRYPOINT_ASSEMBLY: Mvp.Project.MvpSite.dll
+        ARTIFACTS_FOLDER: /artifacts/mvp-rendering
+    volumes:
+      - ${LOCAL_DEPLOY_PATH}\mvp-rendering:C:\deploy
+    environment:
+      ENTRYPOINT_ASSEMBLY: Mvp.Project.MvpSite.dll
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://*:80"
+      Sitecore__InstanceUri: "http://cm"
+      Sitecore__RenderingHostUri: "https://${MVP_RENDERING_HOST}"
+      Sitecore__EnableExperienceEditor: "true" 
+      Okta__OktaDomain: ${OKTA_DOMAIN}
+      Okta__ClientId: ${OKTA_CLIENT_ID}
+      Okta__ClientSecret: ${OKTA_CLIENT_SECRET}
+      Okta__AuthorizationServerId: ${OKTA_AUTH_SERVER_ID}
+    depends_on:
+      - solution
+      - cm
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mvp-secure.entrypoints=websecure"
+      - "traefik.http.routers.mvp-secure.rule=Host(`${MVP_RENDERING_HOST}`)"
+      - "traefik.http.routers.mvp-secure.tls=true"   
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      interval: 60s
+      timeout: 30s
+
 
   # Mount the Traefik configuration and certs.
   traefik:
     volumes:
       - ./docker/traefik:C:/etc/traefik
     depends_on:
-      - rendering
-  
-  redis:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-redis:${VERSION:-latest}
-    build:
-      context: ./docker/build/redis
-      args:
-        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-redis:${SITECORE_VERSION}
+      - cm
+
+  # Mount our SQL data folder and use our custom image with the Headless Services (JSS)
+  # module data added. See Dockerfile for details.
   mssql:
     volumes:
-      - ${LOCAL_DATA_PATH}\mssql:c:\data
+      - type: bind
+        source: .\docker\data\sql
+        target: c:\data
 
-  mssql-init:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-mssql-init:${VERSION:-latest}
-    build:
-      context: ./docker/build/mssql-init
-      args:
-        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-mssql-init:${SITECORE_VERSION}
-        HEADLESS_SERVICES_IMAGE: ${HEADLESS_SERVICES_IMAGE}
-        SPE_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-spe-assets:${SPE_VERSION}
-        SXA_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-sxa-xm1-assets:${SXA_VERSION}
+  # Mount our Solr data folder and use our retagged Solr image.
+  # Some modules (like SXA) also require additions to the Solr image.
   solr:
     volumes:
-      - ${LOCAL_DATA_PATH}\solr:c:\data
-      
-  solr-init:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-solr-init:${VERSION:-latest}
-    build:
-      context: ./docker/build/solr-init
-      args:
-        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-solr-init:${SITECORE_VERSION}
-        SXA_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-sxa-xm1-assets:${SXA_VERSION}
-    mem_limit: 1GB
+      - type: bind
+        source: .\docker\data\solr
+        target: c:\data
 
-  id:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-id6:${VERSION:-latest}
-    build:
-      context: ./docker/build/id
-      args:
-        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-id6:${SITECORE_VERSION}
-    volumes:
-      - ${HOST_LICENSE_FOLDER}:C:\license
-    environment:
-      SITECORE_LICENSE_LOCATION: C:\license\license.xml
-
-  cd:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd:${VERSION:-latest}
-    build:
-      context: ./docker/build/cd
-      args:
-        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cd:${SITECORE_VERSION}
-        HEADLESS_SERVICES_IMAGE: ${HEADLESS_SERVICES_IMAGE}
-        TOOLING_IMAGE: ${SITECORE_TOOLS_REGISTRY}sitecore-docker-tools-assets:${TOOLS_VERSION}
-        SOLUTION_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
-        SXA_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-sxa-xm1-assets:${SXA_VERSION}
-    depends_on:
-      - solution
-    volumes:
-      - ${LOCAL_DEPLOY_PATH}\website:C:\deploy
-      - ${LOCAL_DATA_PATH}\cd:C:\inetpub\wwwroot\App_Data\logs
-      - ${HOST_LICENSE_FOLDER}:C:\license
-    environment:
-      BASIC_COMPANY_URL: ${SITE_HOST}
-      RENDERING_HOST_PUBLIC_URI: "https://${RENDERING_HOST}"
-      SITECORE_LICENSE_LOCATION: C:\license\license.xml
-      SITECORE_DEVELOPMENT_PATCHES: CustomErrorsOff
-    entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
-    labels:
-      - "traefik.http.routers.cd-secure.rule=Host(`${SITE_HOST}`) || Host(`${CD_HOST}`)"
-
+  # Use our custom CM image with added modules and solution code.
+  # Folders are mounted below for code deployment and log output. See Dockerfile for details.
+  # Configure for a mounted license file instead of using SITECORE_LICENSE.
   cm:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cm:${VERSION:-latest}
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xmcloud-cm:${VERSION:-latest}
     build:
       context: ./docker/build/cm
       args:
-        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cm:${SITECORE_VERSION}
-        TOOLING_IMAGE: ${SITECORE_TOOLS_REGISTRY}sitecore-docker-tools-assets:${TOOLS_VERSION}
+        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xmcloud-cm:${SITECORE_VERSION}
         SOLUTION_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
-        HEADLESS_SERVICES_IMAGE: ${HEADLESS_SERVICES_IMAGE}
-        MANAGEMENT_SERVICES_IMAGE: ${MANAGEMENT_SERVICES_IMAGE}
-        SPE_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-spe-assets:${SPE_VERSION}
-        SXA_IMAGE: ${SITECORE_DOCKER_REGISTRY}modules/sitecore-sxa-xm1-assets:${SXA_VERSION}
+        TOOLS_IMAGE: ${TOOLS_IMAGE}
     depends_on:
       - solution
     volumes:
-      - ${LOCAL_DEPLOY_PATH}\website:C:\deploy
+      - ${LOCAL_DEPLOY_PATH}\platform:C:\deploy
       - ${LOCAL_DATA_PATH}\cm:C:\inetpub\wwwroot\App_Data\logs
-      - ${LOCAL_ITEM_PATH}:c:\items-mounted
-      - ${HOST_LICENSE_FOLDER}:C:\license
+      - ${HOST_LICENSE_FOLDER}:c:\license
     environment:
-      ITEM_SYNC_LOCATION: c:\items-mounted
-      SITECORE_LICENSE_LOCATION: C:\license\license.xml
-      JSS_VRaves_DEPLOYMENT_SECRET: ${JSS_VRaves_DEPLOYMENT_SECRET}
+      Sitecore__ExternalCdUrl: "${CM_HOST}"
+      SITECORE_LICENSE_LOCATION: c:\license\license.xml
+      JSS_EdgeWebsite_DEPLOYMENT_SECRET: ${JSS_EdgeWebsite_DEPLOYMENT_SECRET}
       SITECORE_JSS_EDITING_SECRET: ${JSS_EDITING_SECRET}
-      RENDERING_HOST_PUBLIC_URI: "https://${RENDERING_HOST}"
-      UNICORN_SHARED_SECRET: ${UNICORN_SHARED_SECRET}
-      UNICORN_ENABLE_TRANSPARENT_SYNC: ${UNICORN_ENABLE_TRANSPARENT_SYNC}
-      SITECORE_DEVELOPMENT_PATCHES: CustomErrorsOff
+      SITECORE_Pages_Client_Host: ${SITECORE_Pages_Client_Host}
+      SITECORE_Pages_CORS_Allowed_Origins: ${SITECORE_Pages_CORS_Allowed_Origins}
+      ## SugconEu Rendering Host
+      SUGCONEU_RENDERING_HOST_ENDPOINT_URI: "${SUGCON_EU_HOST_INTERNAL_URI}/api/editing/render"
+      SUGCONEU_RENDERING_HOST_PUBLIC_URI: "https://${SUGCON_EU_HOST}"
+      ## SugconAnzsugcon/ Rendering Host
+      SUGCONANZ_RENDERING_HOST_ENDPOINT_URI: "${SUGCON_ANZ_HOST_INTERNAL_URI}/api/editing/render"
+      SUGCONANZ_RENDERING_HOST_PUBLIC_URI: "https://${SUGCON_ANZ_HOST}"
+      ## Development Environment Optimizations
+      SITECORE_DEVELOPMENT_PATCHES: DevEnvOn,CustomErrorsOff,DebugOn,DiagnosticsOff,InitMessagesOff
+      Sitecore_AppSettings_exmEnabled:define: "no" # remove to turn on EXM
     entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
