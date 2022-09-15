@@ -5,7 +5,7 @@ const AsyncAwait = () => {
   const [projects, setProjects] = useState([])
 
   const fetchData = async () => {
-    const response = await fetch("/api/fetch-xm-projects")
+    const response = await fetch("/api/xmcloud/fetch-xm-projects")
     const data = await response.json()
     setProjects(data)
   }
