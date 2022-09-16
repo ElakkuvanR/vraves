@@ -1,6 +1,6 @@
 export default async function getEnvVariableForProject(req, res) {
   const projectId = req.query.projectId;
-  const domainName= req.query.domainName;
+  const domainName= req.query.domainName ?? "Production";
 
   //get access token through vercel access code
   const res = await fetch(`/api/get-access-token?code=${req.query.code}`)

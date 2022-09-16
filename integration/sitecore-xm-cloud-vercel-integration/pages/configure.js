@@ -32,7 +32,8 @@ export default function Configure() {
     }
     console.log("Clone repo called");
     if (router.isReady && code) {
-      console.log("router");
+      console.log("router");      
+      localStorage.setItem("code", code);
       apiUrl = apiUrl + `&code=${code}`;
       cloneRepo(apiUrl);
       localStorage.removeItem("apiUrl");

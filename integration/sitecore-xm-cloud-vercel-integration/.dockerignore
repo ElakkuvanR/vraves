@@ -23,4 +23,3 @@ docker-compose*
 scjssconfig.json
 **/*.yml
 **/*.module.json
-sitecore.json
