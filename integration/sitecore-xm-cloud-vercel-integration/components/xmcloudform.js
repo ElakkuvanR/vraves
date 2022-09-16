@@ -15,7 +15,7 @@ const XMCloudForm = () => {
   const projectName = useRef();
   const addProjectHandler = async (handler) => {
     const res = await fetch(
-      `/api/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}`
+      `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}`
     );
   };
   return (
