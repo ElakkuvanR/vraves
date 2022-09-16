@@ -1,8 +1,9 @@
 import { useEffect, useContext, useState } from "react";
 import GithubLogin from "components/githublogin";
 import Layout from "components/layout";
-import { useRouter } from "next/router";
+import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
+import XMCloudForm from "components/xmcloudform";
 
 // The URL of this page should be added as Configuration URL in your integration settings on Vercel
 export default function Configure() {
@@ -12,21 +13,20 @@ export default function Configure() {
   const params = {
     status: "",
   };
-  const clickMeHand = () => {
-    setData("elakk");
-    console.log("1" + ctx.accesstoken);
-    console.log("2" + data);
-  };
   useEffect(() => {
     const { code } = router.query;
     const cloneRepo = async (code) => {
       const res = await fetch(apiUrl);
+      console.log("Clone Result " + res.json);
       params.status = "logged-in";
     };
     let apiUrl = localStorage.getItem("apiUrl");
     if (!apiUrl) {
       apiUrl = `/api/git/cloneRepository?projectid=${ctx.projectid}&repo=${ctx.repourl}`;
+      const projectIdStore = `${ctx.projectid}`;
       localStorage.setItem("apiUrl", apiUrl);
+      console.log("projectIdStore " + projectIdStore);
+      localStorage.setItem("projectid", projectIdStore);
     }
     console.log("Clone repo called");
     if (router.isReady && code) {
@@ -34,6 +34,7 @@ export default function Configure() {
       apiUrl = apiUrl + `&code=${code}`;
       cloneRepo(apiUrl);
       localStorage.removeItem("apiUrl");
+      router.push("/createnewproject");
     }
   }, [router, ctx]);
 
@@ -46,7 +47,6 @@ export default function Configure() {
         <section className="py-4 flex justify-center">
           <GithubLogin {...params} />
         </section>
-        <button onClick={clickMeHand}>Click Me</button>
       </div>
     </Layout>
   );
