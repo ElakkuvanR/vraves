@@ -1,14 +1,48 @@
 import { PowerShell } from "full-powershell";
-
+import path from "path";
+import fs from "fs";
 export default async function createXMCloudEnv(req, res) {
   res.setHeader("Content-Type", "text/html;charset=utf-8");
 
-  let environmentId = req.query.envid;
+  // Navigate to Project Folder
+  const localPath = path.resolve(
+    process.env.GITHUB_CLONE_FOLDER + "\\" + req.query.projectid
+  );
 
-  const powershellL = new PowerShell();
+  const powershell = new PowerShell({
+    tmp_dir: "D:\\log\\",
+    timeout: 12000000,
+  });
+  const navigate = `Set-Location -Path ${localPath}`;
+  await powershell
+    .call(navigate, "string")
+    .promise()
+    .then(
+      (result) => {
+        console.log(result.success);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+
+  // Navigate to Project Folder
+  const navigate1 = `dotnet tool restore`;
+  await powershell
+    .call(navigate1, "string")
+    .promise()
+    .then(
+      (result) => {
+        console.log(result.success);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+
   // Login
   const loginPs = `dotnet sitecore cloud login --client-credentials --client-id ${req.query.clientid} --client-secret ${req.query.clientsecret}`;
-  await powershellL
+  await powershell
     .call(loginPs, "string")
     .promise()
     .then(
@@ -19,83 +53,69 @@ export default async function createXMCloudEnv(req, res) {
         console.error(err);
       }
     );
-  powershellL.destroy();
 
-  // create project/environment only in case environmentId was not passed via query
-  if (environmentId == null) {
-    // Project Create
-    const powershellPc = new PowerShell();
-    const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
-    let environmentCreationPs;
-    const resultProjectCreation = await powershellPc
-      .call(projectCreationPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          environmentCreationPs = result.success?.pop();
-          console.log("environmentCreationPs : " + environmentCreationPs);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-    powershellPc.destroy();
+  // Project Create
+  const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
+  let environmentCreationPs;
+  const resultProjectCreation = await powershell
+    .call(projectCreationPs, "string")
+    .promise()
+    .then(
+      (result) => {
+        environmentCreationPs = result.success?.pop();
+        console.log("environmentCreationPs : " + environmentCreationPs);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
 
-    // Environment Create
-    const powershellEc = new PowerShell();
-    environmentCreationPs = String(environmentCreationPs)
-      .replace("<environment-name>", req.query.envname)
-      .trim();
-    environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
-    const envResult = await powershellEc
-      .call(environmentCreationPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          environmentId = extractEnvironmentId(result.success.pop());
-          console.log("environmentId : " + environmentId);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-    powershellEc.destroy();
+  // Environment Create
+  environmentCreationPs = String(environmentCreationPs)
+    .replace("<environment-name>", req.query.envname)
+    .trim();
+  environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
+  let environmentId;
+  const envResult = await powershell
+    .call(environmentCreationPs, "string")
+    .promise()
+    .then(
+      (result) => {
+        environmentId = extractEnvironmentId(result.success.pop());
+        console.log("environmentId : " + environmentId);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
 
-    // XM Default Deployment
-    const powershellXMD = new PowerShell();
-    const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId}`;
-    const deloyResult = await powershellXMD
-      .call(deploymentPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          console.log("Deployment Status : " + result.success);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-    powershellXMD.destroy();
+  // Processing the build Json File
+  if (fs.existsSync(`${localPath}` + "\\xmcloud.build.json")) {
+    var buildFileJson = JSON.parse(fs.readFileSync(`${localPath}` + "\\xmcloud.build.json"));
+    console.log(jsonFormat);
+    const renderingHost = buildConfig.renderingHosts;
+    for (var key in renderingHost) {
+      console.log("Key " + key);
+    }
   }
 
-  // // XM Default Deployment
-  // const deploymentSolPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
-  // await powershell
-  //   .call(deploymentSolPs, "string")
-  //   .promise()
-  //   .then(
-  //     (result) => {
-  //       console.log("Deployment Solution Status : " + result.success);
-  //     },
-  //     (err) => {
-  //       console.error(err);
-  //     }
-  //   );
+  // XM Default Deployment
+  const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
+  const deloyResult = await powershell
+    .call(deploymentPs, "string")
+    .promise()
+    .then(
+      (result) => {
+        console.log("Deployment Status : " + result.success);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
 
   // Connect to the Env
-  const powershellEv = new PowerShell();
   const connectEnvPs = `dotnet sitecore cloud environment connect -id ${environmentId} --allow-write`;
-  await powershellEv
+  await powershell
     .call(connectEnvPs, "string")
     .promise()
     .then(
@@ -106,11 +126,10 @@ export default async function createXMCloudEnv(req, res) {
         console.error(err);
       }
     );
-  powershellEv.destroy();
+
   // Publish to Edge
-  const powershellPe = new PowerShell();
   const edgePushPs = `dotnet sitecore publish --pt Edge -n ${req.query.envname}`;
-  await powershellPe
+  await powershell
     .call(edgePushPs, "string")
     .promise()
     .then(
@@ -121,29 +140,26 @@ export default async function createXMCloudEnv(req, res) {
         console.error(err);
       }
     );
-  powershellPe.destroy();
 
   // Create Edge Token
   // The hard-coded path to be removed
-  const powershellEt = new PowerShell();
-  const edgeTokenPs = `(Get-Content "D:\\ValtechHackathon_2022\\XM-Cloud-Introduction\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
+  const edgeTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
   let accessToken;
-  await powershellEt
+  await powershell
     .call(edgeTokenPs, "json")
     .promise()
     .then(
       (result) => {
-        accessToken = result.success;
+        accessToken = res.status(200).json(result.success);
       },
       (err) => {
         console.error(err);
       }
     );
-  powershellEt.destroy();
 
   console.log("Access Token " + accessToken);
   const result = await fetch(
-    `https://xmclouddeploy-api.sitecorecloud.io/api/environments/v1/${environmentId}/obtain-edge-token`,
+    `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

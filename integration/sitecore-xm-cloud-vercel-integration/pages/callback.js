@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
 import XMCloudForm from "components/xmcloudform";
+import CreateProjectPrompt from "components/createProjectPrompt";
 import GithubLogin from "components/githublogin";
 import TokenContext from "store/token-context";
 
@@ -12,10 +13,6 @@ export default function CallbackPage() {
   const [projects, setProjects] = useState();
   const ctx = useContext(TokenContext);
 
-  const clickMeHand = () => {
-    console.log("1" + ctx.accesstoken);
-    console.log("2" + ctx.projectid);
-  };
   useEffect(
     () => {
       const fetchAccessToken = async (code, project, next) => {
@@ -66,36 +63,10 @@ export default function CallbackPage() {
               Please provide below details
             </h1>
             <section className="py-4 flex justify-center">
-              <XMCloudForm />
+              <CreateProjectPrompt />
             </section>
           </div>
         </section>
-
-        {/* <section className="py-4">
-          <h1 className="text-lg font-medium">Data:</h1>
-          <div className="mt-1">
-            {data.accessToken ? (
-              <pre className="text-sm">
-                {JSON.stringify(data, null, '  ')}
-              </pre>
-            ) : <Loader />}
-          </div>
-        </section> */}
-
-        {/* <section className="py-4">
-          <h1 className="text-lg font-medium">Projects:</h1>
-          <div className="mt-1">
-            {projects ? (
-              <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                {projects.map(project => (
-                  <div key={project.id} className="truncate">
-                    {project.name}
-                  </div>
-                ))}
-              </div>
-            ) : <Loader />}
-          </div>
-        </section> */}
 
         <section className="py-4 flex justify-center">
           {/* This redirect should happen programmatically if you're done with everything on your side */}
@@ -107,7 +78,6 @@ export default function CallbackPage() {
           >
             Redirect me back to Vercel
           </button>
-          <button onClick={clickMeHand}>Click Me</button>
         </section>
       </div>
     </Layout>
