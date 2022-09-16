@@ -7,12 +7,11 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$XmCloudVersion = "1.0.19" #(get-content sitecore.json | ConvertFrom-Json).plugins -match 'Sitecore.DevEx.Extensibility.XMCloud'
-Write-Host '$XmCloudVersion ' $XmCloudVersion
-# if ($XmCloudVersion -eq '' -or $LASTEXITCODE -ne 0) {
-#     Write-Error "Unable to find version of XM Cloud Plugin"
-# }
-$XmCloudVersion = "1.0.19" #($XmCloudVersion -split '@')[1]
+$XmCloudVersion = (get-content sitecore.json | ConvertFrom-Json).plugins -match 'Sitecore.DevEx.Extensibility.XMCloud' 
+if ($XmCloudVersion -eq '' -or $LASTEXITCODE -ne 0) {
+    Write-Error "Unable to find version of XM Cloud Plugin"
+}
+$XmCloudVersion = ($XmCloudVersion -split '@')[1]
 $pluginJsonFile = Get-Item -path "$PSScriptRoot\.sitecore\package-cache\nuget\Sitecore.DevEx.Extensibility.XMCloud.$($XmCloudVersion)\plugin\plugin.json"
 $XmCloudDeployApi = (Get-Content $pluginJsonFile | ConvertFrom-Json).xmCloudDeployEndpoint
 $XmCloudDeployAccessToken = (Get-Content "$PSScriptRoot\.sitecore\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken
@@ -23,7 +22,7 @@ $URL = @(
     $EnvironmentId
     'obtain-edge-token'
 )
-Write-Host $URL
+
 $Response = Invoke-RestMethod ($URL -join '/') -Method 'GET' -Headers $Headers -Verbose
 $AccessToken = $Response.apiKey
 $EdgeUrl = "$($Response.edgeUrl)/api/graphql/ide"

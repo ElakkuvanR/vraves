@@ -2,6 +2,8 @@
 
 This app is an example integration, built with Next.js.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ElakkuvanR/vraves&repo-name=vraves&envDescription=Keys%20for%20Integration&redirect-url=https://cm.vraves.localhost/sitecore&demo-title=XM-Vercel-Integration&demo-description=XM%20Cloud%20Vercel%20Integration&demo-url=https://rh.vraves.localhost&demo-image=https://getlogo.net/wp-content/uploads/2020/11/valtech-logo-vector.png&integration-ids=oac_tpWgbB5pxqz2mOjz2QSLA6gU)
+
 It shows:
 
 - how to exchange the `code` for an `access_token` to interact with the API

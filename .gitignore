@@ -1,6 +1,20 @@
-# Ignore thumbnails created by Windows
+# Sitecore assets
+.sitecore/package-cache/
+.sitecore/user.json
+.scindex
+*.itempackage
+*.sicpackage
+
+# IDE Settings
+.vscode
+
+# Environment files
+.env
+
+# Windows thumbnails
 Thumbs.db
-# Ignore files built by Visual Studio
+
+# VS Assets
 *.obj
 *.exe
 *.pdb
@@ -28,5 +42,23 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
 .vscode/
+
 # Nuget packages folder
 packages/
+
+# Docker folders
+/docker/data/cm/*
+!/docker/data/cm/.gitkeep
+/docker/data/sql/*
+!/docker/data/sql/.gitkeep
+/docker/data/solr/*
+!/docker/data/solr/.gitkeep
+/docker/deploy/platform/*
+!/docker/deploy/platform/.gitkeep
+/docker/deploy/mvp-rendering/*
+!/docker/deploy/mvp-rendering/.gitkeep
+/docker/traefik/certs/*.pem
+/docker/build/*
+
+.vercel
+xmcloud.plugin.pre-release.json

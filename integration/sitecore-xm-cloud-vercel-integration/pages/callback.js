@@ -1,66 +1,74 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Layout from 'components/layout'
-import Loader from 'components/loader'
-import XMCloudForm from 'components/xmcloudform'
-import GithubLogin from 'components/githublogin'
+import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/router";
+import Layout from "components/layout";
+import XMCloudForm from "components/xmcloudform";
+import GithubLogin from "components/githublogin";
+import TokenContext from "store/token-context";
 
 export default function CallbackPage() {
-  const router = useRouter()
-  const [data, setData] = useState({})
-  const [projects, setProjects] = useState()
+  const router = useRouter();
+  const query = router.query;
+  const [data, setData] = useState({});
+  const [projects, setProjects] = useState();
+  const ctx = useContext(TokenContext);
 
-  useEffect(() => {
-    const fetchAccessToken = async (code) => {
-      const res = await fetch(`/api/vercel/get-access-token?code=${code}`)
-      const json = await res.json()
-
-      setData({
-        accessToken: json.access_token,
-        userId: json.user_id,
-        teamId: json.team_id
-      })
-    }
-
-    if (router.isReady && !data.accessToken) {
-      const { code } = router.query
-      fetchAccessToken(code)
-    }
-  }, [router])
-
-  useEffect(() => {
-    const fetchProjects = async (accessToken, teamId) => {
-      if (accessToken) {
-        {/* If we have a teamId, all calls to the Vercel API should have it attached as a query parameter */ }
-        const res = await fetch(`https://api.vercel.com/v4/projects${teamId ? `?teamId=${teamId}` : ''}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        const json = await res.json()
-
-        setProjects(json.projects)
+  const clickMeHand = () => {
+    console.log("1" + ctx.accesstoken);
+    console.log("2" + ctx.projectid);
+  };
+  useEffect(
+    () => {
+      const fetchAccessToken = async (code, project, next) => {
+        const res = await fetch(`/api/vercel/get-access-token?code=${code}`);
+        const json = await res.json();
+        setData({
+          accessToken: json.access_token,
+          userId: json.user_id,
+          teamId: json.team_id,
+        });
+        const projectResult = await fetch(
+          `/api/vercel/fetch-project-by-id?code=${code}&projectId=${project}&token=${json.access_token}`
+        );
+        const projectJson = await projectResult.json();
+        const projectRepoPath = `https://${projectJson.link.type}.com/${projectJson.link.org}/${projectJson.link.repo}.git`;
+        ctx.setTokenValues(
+          code,
+          project,
+          next,
+          json.access_token,
+          projectRepoPath
+        );
+        router.push("/configure");
+      };
+      if (router.isReady) {
+        const { code, currentProjectId, next } = router.query;
+        if (!data.accessToken) {
+          fetchAccessToken(code, currentProjectId, next);
+        }
       }
-    }
-
-    const { accessToken, teamId } = data
-    fetchProjects(accessToken, teamId)
-  }, [data])
+    },
+    [router],
+    [data]
+  );
 
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
         <section className="py-4 flex items-center space-x-2 justify-center">
-          <h1 className="text-lg font-medium">Setup Sitecore XM Cloud Project</h1>
+          <h1 className="text-lg font-medium">
+            Setup Sitecore XM Cloud Project
+          </h1>
         </section>
 
         <section className="py-4 ">
           <div className="space-y-2 text-center">
-            <h1 className="text-lg font-medium">Please provide below details</h1>
-              <section className="py-4 flex justify-center">                
-                <XMCloudForm/>
-              </section>
-           </div>
+            <h1 className="text-lg font-medium">
+              Please provide below details
+            </h1>
+            <section className="py-4 flex justify-center">
+              <XMCloudForm />
+            </section>
+          </div>
         </section>
 
         {/* <section className="py-4">
@@ -89,17 +97,19 @@ export default function CallbackPage() {
           </div>
         </section> */}
 
-
         <section className="py-4 flex justify-center">
           {/* This redirect should happen programmatically if you're done with everything on your side */}
           <button
             className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
             onClick={() => {
-              router.push(router.query.next)
+              router.push(router.query.next);
             }}
-          >Redirect me back to Vercel</button>
+          >
+            Redirect me back to Vercel
+          </button>
+          <button onClick={clickMeHand}>Click Me</button>
         </section>
       </div>
     </Layout>
-  )
+  );
 }
