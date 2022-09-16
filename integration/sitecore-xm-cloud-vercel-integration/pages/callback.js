@@ -13,10 +13,6 @@ export default function CallbackPage() {
   const [projects, setProjects] = useState();
   const ctx = useContext(TokenContext);
 
-  const clickMeHand = () => {
-    console.log("1" + ctx.accesstoken);
-    console.log("2" + ctx.projectid);
-  };
   useEffect(
     () => {
       const fetchAccessToken = async (code, project, next) => {
@@ -72,32 +68,6 @@ export default function CallbackPage() {
           </div>
         </section>
 
-        {/* <section className="py-4">
-          <h1 className="text-lg font-medium">Data:</h1>
-          <div className="mt-1">
-            {data.accessToken ? (
-              <pre className="text-sm">
-                {JSON.stringify(data, null, '  ')}
-              </pre>
-            ) : <Loader />}
-          </div>
-        </section> */}
-
-        {/* <section className="py-4">
-          <h1 className="text-lg font-medium">Projects:</h1>
-          <div className="mt-1">
-            {projects ? (
-              <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                {projects.map(project => (
-                  <div key={project.id} className="truncate">
-                    {project.name}
-                  </div>
-                ))}
-              </div>
-            ) : <Loader />}
-          </div>
-        </section> */}
-
         <section className="py-4 flex justify-center">
           {/* This redirect should happen programmatically if you're done with everything on your side */}
           <button
@@ -108,7 +78,6 @@ export default function CallbackPage() {
           >
             Redirect me back to Vercel
           </button>
-          <button onClick={clickMeHand}>Click Me</button>
         </section>
       </div>
     </Layout>

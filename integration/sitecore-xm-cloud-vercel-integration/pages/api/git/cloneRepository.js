@@ -50,10 +50,10 @@ export default async function cloneRepository(req, res) {
         console.log(err);
       })
       .then(function (repository) {
-        console.log(repository);
+        console.log("result " + localPath);
+        return res.status(200).json(localPath);
       });
-    res.status(200).json({ message: "done" });
   };
 
-  await cloneRepo(req.query.code);
+  return await cloneRepo(req.query.code);
 }
