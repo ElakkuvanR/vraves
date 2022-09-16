@@ -27,6 +27,7 @@ export default function CallbackPage() {
           `/api/vercel/fetch-project-by-id?code=${code}&projectId=${project}&token=${json.access_token}`
         );
         const projectJson = await projectResult.json();
+        console.log("project-details",projectJson);
         const projectRepoPath = `https://${projectJson.link.type}.com/${projectJson.link.org}/${projectJson.link.repo}.git`;
         ctx.setTokenValues(
           code,
@@ -35,6 +36,8 @@ export default function CallbackPage() {
           json.access_token,
           projectRepoPath
         );
+        console.log("ctx pid", ctx.projectid);
+        console.log("ctx code", ctx.code);
         router.push("/configure");
       };
       if (router.isReady) {

@@ -83,10 +83,16 @@ RUN setx PATH "%PATH%;C:\node\;" /M
 RUN icacls.exe C:\node\ /grant "Authenticated Users":(F) /t
 
 SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Continue'; $ProgressPreference = 'Continue';"]
+##Create Dir log & tmp
+RUN New-Item -Path 'C:\temp' -ItemType Directory; `
+    New-Item -Path 'C:\log' -ItemType Directory
+
+
 WORKDIR /app
 
 #2. Copy integration app code
-COPY integration/sitecore-xm-cloud-vercel-integration /app
+COPY . /app
+RUN dir
 #3. install sitecore docker tools
 RUN ./installdependencies.ps1
 #4. install latest dotnet 6

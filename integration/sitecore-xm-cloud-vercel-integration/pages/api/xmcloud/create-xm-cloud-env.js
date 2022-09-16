@@ -10,7 +10,7 @@ export default async function createXMCloudEnv(req, res) {
   );
 
   const powershell = new PowerShell({
-    tmp_dir: "D:\\log\\",
+    tmp_dir: process.env.PWSH_LOG_FOLDER ?? "C:\\log\\",
     timeout: 12000000,
   });
   const navigate = `Set-Location -Path ${localPath}`;
@@ -96,6 +96,30 @@ export default async function createXMCloudEnv(req, res) {
     const renderingHost = buildConfig.renderingHosts;
     for (var key in renderingHost) {
       console.log("Key " + key);
+    }
+  }
+
+  // Processing the build Json File
+
+  if (fs.existsSync(`${localPath}` + "\\xmcloud.build.json")) {
+    var buildFileJson = JSON.parse(
+      fs.readFileSync(`${localPath}` + "\\xmcloud.build.json")
+    );
+    console.log(buildFileJson);
+    const renderingHost = buildFileJson.renderingHosts;
+    for (var key in renderingHost) {
+      const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
+      const envVariableSet = `Set-EnvFileVariable ${envVariable}`;
+      await powershell
+        .call(envVariableSet, "string")
+        .promise()
+        .then(
+          (result) => {
+            console.log(result.success);
+          },
+          (err) => {
+            console.error(err);
+          });
     }
   }
 

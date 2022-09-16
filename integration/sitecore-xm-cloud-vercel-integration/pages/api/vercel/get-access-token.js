@@ -7,14 +7,16 @@ import qs from 'querystring'
  * we get "Invalid grant: authorization code is invalid".
  */
 export default async function getAccessToken(req, res) {
+  console.log("VERCEL CLIENT ID :: ",process.env.VERCEL_CLIENT_ID);
+  console.log(process.env.VERCEL_CLIENT_SECRET)
   const result = await fetch('https://api.vercel.com/v2/oauth/access_token', {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     method: 'POST',
     body: qs.stringify({
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
+      client_id: process.env.VERCEL_CLIENT_ID,
+      client_secret: process.env.VERCEL_CLIENT_SECRET,
       code: req.query.code,
       redirect_uri: `${process.env.HOST}/callback` // this parameter should match the Redirect URL in your integration settings on Vercel
     })
