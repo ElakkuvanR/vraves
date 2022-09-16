@@ -59,6 +59,12 @@ packages/
 !/docker/deploy/mvp-rendering/.gitkeep
 /docker/traefik/certs/*.pem
 /docker/build/*
+/docker/data/cd/*
+!/docker/deploy/cd/.gitkeep
+/docker/data/mssql/*
+!/docker/data/mssql/.gitkeep
 
 .vercel
 xmcloud.plugin.pre-release.json
+
+node_modules
