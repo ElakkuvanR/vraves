@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
 import XMCloudForm from "components/xmcloudform";
+import CreateProjectPrompt from "components/createProjectPrompt";
 import GithubLogin from "components/githublogin";
 import TokenContext from "store/token-context";
 
@@ -66,7 +67,7 @@ export default function CallbackPage() {
               Please provide below details
             </h1>
             <section className="py-4 flex justify-center">
-              <XMCloudForm />
+              <CreateProjectPrompt />
             </section>
           </div>
         </section>
