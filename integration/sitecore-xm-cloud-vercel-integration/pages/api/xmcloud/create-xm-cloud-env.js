@@ -39,7 +39,7 @@ export default async function createXMCloudEnv(req, res) {
   // Environment Create
   const powershellEc = new PowerShell();
   environmentCreationPs = String(environmentCreationPs)
-    .replace("<environment-name>", req.query.envname)
+    .replace("<environment-name>", req.query.environmentName)
     .trim();
   environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
   let environmentId;
