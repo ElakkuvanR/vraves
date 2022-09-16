@@ -1,4 +1,5 @@
 import Layout from 'components/layout'
+import CreateProjectPrompt from 'components/createProjectPrompt'
 
 export default function SelectProjectOptions() {
   return (
