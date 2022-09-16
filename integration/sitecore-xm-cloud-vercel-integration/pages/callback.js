@@ -78,7 +78,6 @@ export default function CallbackPage() {
           >
             Redirect me back to Vercel
           </button>
-          <button onClick={clickMeHand}>Click Me</button>
         </section>
       </div>
     </Layout>

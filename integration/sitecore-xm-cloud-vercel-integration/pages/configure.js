@@ -34,7 +34,7 @@ export default function Configure() {
       apiUrl = apiUrl + `&code=${code}`;
       cloneRepo(apiUrl);
       localStorage.removeItem("apiUrl");
-      router.push("/createnewproject");
+      router.push("/createNewProject");
     }
   }, [router, ctx]);
 
