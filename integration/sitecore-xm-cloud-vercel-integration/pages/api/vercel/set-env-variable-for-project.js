@@ -11,7 +11,7 @@
   const variableValue = req.query.variableValue;
 
   //get access token through vercel access code
-  const res = await fetch(`/api/get-access-token?code=${req.query.code}`)
+  const res = await fetch(`/api/vercel/get-access-token?code=${req.query.code}`)
   const json = await res.json()
   
   const result = await fetch(`https://api.vercel.com/v9/projects/${projectId}/env/${envId}`, {

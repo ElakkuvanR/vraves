@@ -24,7 +24,7 @@ const XMCloudForm = () => {
       `/api/vercel/get-domain-by-projectid?projectid=${projectId}&code=${code}`
     );
     console.log(vercelDomain);
-    const vercelRootDirectory = localStorage.get("rootDirectory");
+    const vercelRootDirectory = localStorage.getItem("rootDirectory");
     const res = await fetch(
       `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${vercelDomain.name}&rootDirectory=${vercelRootDirectory}`
     );
