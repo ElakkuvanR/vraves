@@ -1,13 +1,16 @@
+import Cookies from "cookies";
+
 export default async function fetchProjectbyID(req, res) {
   const projectId = req.query.projectId;
   console.log("projectId " + projectId);
-  const accesstoken = req.query.token;
-  console.log("accesstoken " + accesstoken);
+  const cookies = new Cookies(req, res);
+  const accessToken = req.query.token ?? cookies.get("vat");
+  console.log("accesstoken " + accessToken);
   const result = await fetch(
     `https://api.vercel.com/v9/projects/${projectId}`,
     {
       headers: {
-        Authorization: `Bearer ${accesstoken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       method: "get",
     }
