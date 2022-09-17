@@ -1,7 +1,7 @@
 import Layout from 'components/layout'
-import CreateProjectPrompt from 'components/createProjectPrompt'
+import SelectProjectType from 'components/SelectProjectType'
 
-export default function SelectProjectOptions() {
+export default function projectType() {
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
@@ -17,7 +17,7 @@ export default function SelectProjectOptions() {
               Please provide below details
             </h1>
             <section className="py-4 flex justify-center">
-              <CreateProjectPrompt />
+              <SelectProjectType />
             </section>
           </div>
         </section>
