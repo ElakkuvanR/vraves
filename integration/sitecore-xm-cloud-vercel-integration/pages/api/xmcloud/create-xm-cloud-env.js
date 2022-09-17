@@ -200,6 +200,11 @@ export default async function createXMCloudEnv(req, res) {
     // );
     // const body = await result.json();
     // console.log("Edge Access Token " + body);
+    // const projectId = req.query.projectId;
+    // const envId = req.query.environmentId;
+    // const variableKey = req.query.variableKey;
+    // const variableValue = req.query.variableValue;
+    // const accessTokenResult = await fetch(`${process.env.HOST}/api/vercel/set-env-variable-for-project?projectId=${req.query.projectid}&envId`)
   } catch (error) {
     console.log(error);
     //remove cloned project
