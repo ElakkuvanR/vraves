@@ -1,14 +1,17 @@
+import Cookies from "cookies";
 export default async function getEnvVariableForProject(req, res) {
-  const projectId = req.query.projectId;
-  const domainName= req.query.domainName ?? "Production";
+  const projectId = req.query.projectid;
+  const domainName= req.query.domainName ?? "production";
 
   //get access token through vercel access code
-  const accessTokenResult = await fetch(`${process.env.HOST}/api/vercel/get-access-token?code=${req.query.code}`)
-  const json = await accessTokenResult.json()
+  // const accessTokenResult = await fetch(`${process.env.HOST}/api/vercel/get-access-token?code=${req.query.code}`)
+  // const json = await accessTokenResult.json()
+  const cookies = new Cookies(req, res);
+  const accessToken = cookies.get("vat");
   
-  const result = await fetch(`https://api.vercel.com/v9/projects/${projectId}/domains/${domainName}`, {
+  const result = await fetch(`https://api.vercel.com/v9/projects/${projectId}/domains`, {
     "headers": {
-      "Authorization": `Bearer ${json.access_token}`
+      "Authorization": `Bearer ${accessToken}`
     },
     "method": "get"
   })

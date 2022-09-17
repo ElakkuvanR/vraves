@@ -1,6 +1,8 @@
 import { PowerShell } from "full-powershell";
 import path from "path";
 import fs from "fs";
+import os from "os";
+
 export default async function createXMCloudEnv(req, res) {
   res.setHeader("Content-Type", "text/html;charset=utf-8");
 
@@ -28,10 +30,16 @@ export default async function createXMCloudEnv(req, res) {
           console.error(err);
         }
       );
+
+    //Create env file 
+    fs.copyFile(`${localPath}` + "\\.env.template", `${localPath}` + "\\.env", (err) => {
+      if (err) throw err;
+      console.log('.env file created');
+    });
     // Navigate to Project Folder
-    const navigate1 = `dotnet tool restore`;
+    const toolRestore = `dotnet tool restore`;
     await powershell
-      .call(navigate1, "string")
+      .call(toolRestore, "string")
       .promise()
       .then(
         (result) => {
@@ -99,25 +107,25 @@ export default async function createXMCloudEnv(req, res) {
       const domainName = req.query.domain;
       const rootDirectory= req.query.rootDirectory;
       const renderingHost = buildFileJson.renderingHosts;
-      console.log("domainName", domainName);
-      console.log("rootDirectory", rootDirectory);
       for (var key in renderingHost) {     
         console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());   
         if(buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0){         
-          const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
-          const envVariableSet = `Set-EnvFileVariable ${envVariable} -Value "${domainName}"`;
-          await powershell
-            .call(envVariableSet, "string")
-            .promise()
-            .then(
-              (result) => {
-                console.log(result.success);
-              },
-              (err) => {
-                console.error(err);
-              }
-            );
-
+             const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
+          // const envVariableSet = `Set-EnvFileVariable "${envVariable}" -Value "${domainName}"`;
+          // console.log("envVariable -->", envVariable, envVariableSet);   
+          // await powershell
+          //   .call(envVariableSet, "string")
+          //   .promise()
+          //   .then(
+          //     (result) => {
+          //       console.log(result.success);
+          //     },
+          //     (err) => {
+          //       console.error(err);
+          //     }
+          //   );
+          fs.appendFileSync(`${localPath}` + "\\.env", "\n"+`${envVariable}=${domainName}`);
+          //setEnvValue(`${localPath}` + "\\.env", envVariable, domainName);
         }
       }
     }
@@ -206,4 +214,22 @@ function extractEnvironmentId(result) {
     String(result).length
   );
   return subString.replace(/\s/g, "");
+}
+
+function setEnvValue(envPath,key, value) {
+
+  // read file from hdd & split if from a linebreak to a array
+  const ENV_VARS = fs.readFileSync(envPath, "utf8").split(os.EOL);
+
+  // find the env we want based on the key
+  const target = ENV_VARS.indexOf(ENV_VARS.find((line) => {
+      return line.match(new RegExp(key));
+  }));
+
+  // replace the key/value with the new value
+  ENV_VARS.splice(target, 1, `${key}=${value}`);
+
+  // write everything back to the file system
+  fs.writeFileSync("./.env", ENV_VARS.join(os.EOL));
+
 }
