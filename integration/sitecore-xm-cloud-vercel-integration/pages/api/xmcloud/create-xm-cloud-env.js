@@ -36,98 +36,98 @@ export default async function createXMCloudEnv(req, res) {
       console.log('.env file created');
     });
     // Navigate to Project Folder
-    // const toolRestore = `dotnet tool restore`;
-    // await powershell
-    //   .call(toolRestore, "string")
-    //   .promise()
-    //   .then(
-    //     (result) => {
-    //       console.log(result.success);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
+    const toolRestore = `dotnet tool restore`;
+    await powershell
+      .call(toolRestore, "string")
+      .promise()
+      .then(
+        (result) => {
+          console.log(result.success);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
 
     // Login
-    // const loginPs = `dotnet sitecore cloud login --client-credentials --client-id ${req.query.clientid} --client-secret ${req.query.clientsecret}`;
-    // await powershell
-    //   .call(loginPs, "string")
-    //   .promise()
-    //   .then(
-    //     (result) => {
-    //       console.log(result.success);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
+    const loginPs = `dotnet sitecore cloud login --client-credentials --client-id ${req.query.clientid} --client-secret ${req.query.clientsecret}`;
+    await powershell
+      .call(loginPs, "string")
+      .promise()
+      .then(
+        (result) => {
+          console.log(result.success);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
 
     // Project Create
-    // const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
-    // let environmentCreationPs;
-    // const resultProjectCreation = await powershell
-    //   .call(projectCreationPs, "string")
-    //   .promise()
-    //   .then(
-    //     (result) => {
-    //       environmentCreationPs = result.success?.pop();
-    //       console.log("environmentCreationPs : " + environmentCreationPs);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
+    const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
+    let environmentCreationPs;
+    const resultProjectCreation = await powershell
+      .call(projectCreationPs, "string")
+      .promise()
+      .then(
+        (result) => {
+          environmentCreationPs = result.success?.pop();
+          console.log("environmentCreationPs : " + environmentCreationPs);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
 
     // // Environment Create
-    // environmentCreationPs = String(environmentCreationPs)
-    //   .replace("<environment-name>", req.query.environmentName)
-    //   .trim();
-    // environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
-    // let environmentId;
-    // const envResult = await powershell
-    //   .call(environmentCreationPs, "string")
-    //   .promise()
-    //   .then(
-    //     (result) => {
-    //       environmentId = extractEnvironmentId(result.success.pop());
-    //       console.log("environmentId : " + environmentId);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
+    environmentCreationPs = String(environmentCreationPs)
+      .replace("<environment-name>", req.query.environmentName)
+      .trim();
+    environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
+    let environmentId;
+    const envResult = await powershell
+      .call(environmentCreationPs, "string")
+      .promise()
+      .then(
+        (result) => {
+          environmentId = extractEnvironmentId(result.success.pop());
+          console.log("environmentId : " + environmentId);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
     // Processing the build Json File
-    // if (fs.existsSync(`${localPath}` + "\\xmcloud.build.json")) {
-    //   var buildFileJson = JSON.parse(
-    //     fs.readFileSync(`${localPath}` + "\\xmcloud.build.json")
-    //   );
-    //   console.log(buildFileJson);
-    //   const domainName = req.query.domain;
-    //   const rootDirectory= req.query.rootDirectory;
-    //   const renderingHost = buildFileJson.renderingHosts;
-    //   for (var key in renderingHost) {     
-    //     console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());   
-    //     if(buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0){         
-    //          const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;          
-    //          fs.appendFileSync(`${localPath}` + "\\.env", "\n"+`${envVariable}=${domainName}`);          
-    //     }
-    //   }
-    // }
+    if (fs.existsSync(`${localPath}` + "\\xmcloud.build.json")) {
+      var buildFileJson = JSON.parse(
+        fs.readFileSync(`${localPath}` + "\\xmcloud.build.json")
+      );
+      console.log(buildFileJson);
+      const domainName = req.query.domain;
+      const rootDirectory= req.query.rootDirectory;
+      const renderingHost = buildFileJson.renderingHosts;
+      for (var key in renderingHost) {     
+        console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());   
+        if(buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0){         
+             const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;          
+             fs.appendFileSync(`${localPath}` + "\\.env", "\n"+`${envVariable}=${domainName}`);          
+        }
+      }
+    }
 
     // XM Default Deployment
-    // const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
-    // const deloyResult = await powershell
-    //   .call(deploymentPs, "string")
-    //   .promise()
-    //   .then(
-    //     (result) => {
-    //       console.log("Deployment Status : " + result.success);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
+    const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
+    const deloyResult = await powershell
+      .call(deploymentPs, "string")
+      .promise()
+      .then(
+        (result) => {
+          console.log("Deployment Status : " + result.success);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
 
     // Connect to the Env
     const connectEnvPs = `dotnet sitecore cloud environment connect -id ${environmentId} --allow-write`;
@@ -185,7 +185,7 @@ export default async function createXMCloudEnv(req, res) {
     );
     const body = await result.json();
     console.log("Edge Access Token " + body);
-    const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SITECORE_API_KEY=${body}`, {
+    const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${body}`, {
       headers : req.headers
     });
     const varResJson = await resultEnvVariables.json();
@@ -193,7 +193,7 @@ export default async function createXMCloudEnv(req, res) {
   } catch (error) {
     console.log(error);
     //remove cloned project
-    //fs.rmSync(localPath, { recursive: true, force: true });
+    fs.rmSync(localPath, { recursive: true, force: true });
   }
 
 }

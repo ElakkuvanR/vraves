@@ -35,6 +35,7 @@ export default async function cloneRepository(req, res) {
     var accessToken = json.access_token;
     var cloneOptions = {};
     cloneOptions.fetchOpts = {
+      options : "'--depth', '1'",
       callbacks: {
         certificateCheck: function () {
           return 0;
