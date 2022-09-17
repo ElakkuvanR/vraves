@@ -17,7 +17,7 @@ export default function Configure() {
     const cloneRepo = async (code) => {
       const res = await fetch(apiUrl).finally(()=>{
         localStorage.removeItem("apiUrl");
-        router.push("/selectProjectOptions");
+        router.push("/project-type");
       });
       console.log("Clone Result " + res.json);
       params.status = "logged-in";
