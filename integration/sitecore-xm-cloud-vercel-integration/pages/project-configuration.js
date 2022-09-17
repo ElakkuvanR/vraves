@@ -39,16 +39,16 @@ const XMProjectConfiguration = () => {
 
   return (
     <Layout>
-      <form className="w-full max-w-sm">
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
             <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
               Client-ID
             </label>
           </div>
-          <div className="md:w-2/3">
+          <div className="md:w-2/4">
             <input
-              className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
               id="clientid"
               type="text"
               ref={clientId}
@@ -61,9 +61,9 @@ const XMProjectConfiguration = () => {
               Client-Secret
             </label>
           </div>
-          <div className="md:w-2/3">
+          <div className="md:w-2/4">
             <input
-              className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+              className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
               id="clientsecret"
               ref={clientSecret}
             />
@@ -72,17 +72,14 @@ const XMProjectConfiguration = () => {
 
         {projectSetupComponent}
 
-        <div className="md:flex md:items-center">
-          <div className="md:w-1/3"></div>
-          <div className="md:w-2/3">
+        <div className="w-full px-6 pb-6 ml-auto text-gray-500 md:w-1/3">
             <button
               onClick={addProjectHandler}
-              className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              className="py-2 px-4  bg-gray-600 hover:bg-gray-800 focus:ring-gray-500 focus:ring-offset-gray-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
               type="button"
             >
               Setup Project
             </button>
-          </div>
         </div>
       </form>
     </Layout>
