@@ -34,7 +34,7 @@ const ProjectSelection = () => {
 
   const addProjectHandler = async (handler) => {
     const res = await fetch(
-      `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${selectedProject.current.value}&envname=${selectedEnvironment.current.value}`
+      `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&envid=${selectedEnvironment.current.value}`
     );
   };
 
