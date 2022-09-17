@@ -1,8 +1,12 @@
 import { PowerShell } from "full-powershell";
 
 export default async function fetchXMProjects(req, res) {
+  const projectId = req.query.projectid;
+  const localPath = path.resolve(
+    process.env.GITHUB_CLONE_FOLDER + "\\" + projectId
+  );
   const powershellEt = new PowerShell();
-  const accessTokenPs = `(Get-Content "D:\\ValtechHackathon_2022\\XM-Cloud-Introduction\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
+  const accessTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
   let accessToken;
   await powershellEt
     .call(accessTokenPs, "json")
