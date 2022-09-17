@@ -1,7 +1,14 @@
 import 'tailwindcss/tailwind.css'
+import { TokenContextProvider } from "store/token-context";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <TokenContextProvider>
+      <Component {...pageProps} />
+    </TokenContextProvider>
+  );
 }
 
-export default MyApp
+
+
+export default MyApp;

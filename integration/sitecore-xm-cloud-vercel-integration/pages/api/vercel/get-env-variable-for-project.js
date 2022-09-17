@@ -1,19 +1,13 @@
-/**
- * This endpoint can be only called once
- *
- * Our `code` is only valid for one request. If we call it more then once,
- * we get "Invalid grant: authorization code is invalid".
- */
+import Cookies from "cookies";
+
 export default async function getEnvVariableForProject(req, res) {
   const projectId = req.query.projectId;
 
-  //get access token through vercel access code
-  const res = await fetch(`/api/get-access-token?code=${req.query.code}`)
-  const json = await res.json()
-  
+  const cookies = new Cookies(req, res);
+  const accessToken = cookies.get("vat");
   const result = await fetch(`https://api.vercel.com/v9/projects/${projectId}/env`, {
     "headers": {
-      "Authorization": `Bearer ${json.access_token}`
+      "Authorization": `Bearer ${accessToken}`
     },
     "method": "get"
   })

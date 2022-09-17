@@ -1,11 +1,14 @@
 import nodegit from "nodegit";
 import path from "path";
+import fs from "fs";
 
 export default async function cloneRepository(req, res) {
   console.log("path " + path);
   const localPath = path.resolve(
     process.env.GITHUB_CLONE_FOLDER + "\\" + req.query.projectid
   );
+  //remove cloned project --making sure the folder is empty before clone
+  fs.rmSync(localPath, { recursive: true, force: true });
   console.log("req.query.projectid " + req.query.projectid);
   console.log("req.query.repo " + req.query.repo);
   console.log(localPath);

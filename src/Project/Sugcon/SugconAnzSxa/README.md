@@ -5,6 +5,8 @@ This is a headless Next.js site that uses the following technologies:
 - Next.js (rendering host)
 - Vercel (hosting)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ElakkuvanR/vraves&repo-name=vraves&envDescription=Keys%20for%20Integration&redirect-url=https://cm.vraves.localhost/sitecore&demo-title=XM-Vercel-Integration&demo-description=XM%20Cloud%20Vercel%20Integration&demo-url=https://rh.vraves.localhost&demo-image=https://getlogo.net/wp-content/uploads/2020/11/valtech-logo-vector.png&integration-ids=oac_tpWgbB5pxqz2mOjz2QSLA6gU&root-directory=src/Project/Sugcon/SugconAnzSxa&env=JSS_Editing_Secret,Sitecore_API_Host,Sitecore_API_Key,Graph_QA_Endpoint,Fetch_With&project-name=SugConAnz)
+
 ## Prerequisites for this Next.js site are:
 - [NodeJS 16 LTS](https://nodejs.org/en/download/) (or greater)
 

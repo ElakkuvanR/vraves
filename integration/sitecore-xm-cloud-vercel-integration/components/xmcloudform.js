@@ -10,13 +10,24 @@ const XMCloudForm = () => {
   client.onopen = () => {
     console.log("Client connected");
   };
+  let projectId,code;
+  useEffect(() => {
+    projectId = localStorage.getItem("projectid");
+    code = localStorage.getItem("code");
+  });
   const clientId = useRef();
   const clientSecret = useRef();
   const projectName = useRef();
   const environmentName = useRef();
   const addProjectHandler = async (handler) => {
+    const vercelDomain = await fetch(
+      `/api/vercel/get-domain-by-projectid?projectid=${projectId}&code=${code}`
+    );
+    const domainsResult = await vercelDomain.json();
+    console.log(domainsResult);
+    const vercelRootDirectory = localStorage.getItem("rootDirectory");
     const res = await fetch(
-      `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}&environmentName=${environmentName.current.value}`
+      `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
     );
   };
   return (

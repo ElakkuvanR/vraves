@@ -21,6 +21,8 @@ export default function Configure() {
       params.status = "logged-in";
     };
     let apiUrl = localStorage.getItem("apiUrl");
+    console.log("config ctx pid", ctx.projectid);
+    console.log("config ctx code", ctx.code);
     if (!apiUrl) {
       apiUrl = `/api/git/cloneRepository?projectid=${ctx.projectid}&repo=${ctx.repourl}`;
       const projectIdStore = `${ctx.projectid}`;
@@ -30,7 +32,8 @@ export default function Configure() {
     }
     console.log("Clone repo called");
     if (router.isReady && code) {
-      console.log("router");
+      console.log("router");      
+      localStorage.setItem("code", code);
       apiUrl = apiUrl + `&code=${code}`;
       cloneRepo(apiUrl);
       localStorage.removeItem("apiUrl");

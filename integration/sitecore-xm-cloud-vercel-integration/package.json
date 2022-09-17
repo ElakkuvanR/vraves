@@ -11,6 +11,7 @@
     "@tailwindcss/forms": "^0.2.1",
     "@types/node": "^18.7.18",
     "autoprefixer": "^10.0.4",
+    "cookies": "^0.8.0",
     "express": "^4.18.1",
     "full-powershell": "^2.1.0",
     "http": "0.0.1-security",
