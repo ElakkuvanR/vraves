@@ -7,7 +7,7 @@ const CreateProjectPrompt = () => {
             {/* <section className="py-4 flex items-center space-x-2 justify-center">
                 <h1 className="text-lg font-medium">Please select an option :</h1>
             </section> */}
-            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
                 <section className="py-4 flex justify-center">
                     <Link href="/select-project">
                         <a className="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md 
