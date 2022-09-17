@@ -3,7 +3,6 @@ import GithubLogin from "components/githublogin";
 import Layout from "components/layout";
 import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
-import XMCloudForm from "components/xmcloudform";
 
 // The URL of this page should be added as Configuration URL in your integration settings on Vercel
 export default function Configure() {

@@ -1,9 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
-import XMCloudForm from "components/xmcloudform";
-import CreateProjectPrompt from "components/createProjectPrompt";
-import GithubLogin from "components/githublogin";
 import TokenContext from "store/token-context";
 
 export default function CallbackPage() {
