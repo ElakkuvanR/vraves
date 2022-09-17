@@ -3,9 +3,11 @@ import path from "path";
 
 export default async function fetchXMEnvironments(req, res) {
   const projectId = req.query.projectid;
+  const vercelProjectId = req.query.vercelprojid;
   const localPath = path.resolve(
-    process.env.GITHUB_CLONE_FOLDER + "\\" + projectId
+    process.env.GITHUB_CLONE_FOLDER + "\\" + vercelProjectId
   );
+  console.log("Path in localPath" + localPath);
   const powershellEt = new PowerShell();
   const accessTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
   let accessToken;
