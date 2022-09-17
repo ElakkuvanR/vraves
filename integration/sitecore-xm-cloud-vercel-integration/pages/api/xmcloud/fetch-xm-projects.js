@@ -1,10 +1,12 @@
 import { PowerShell } from "full-powershell";
+import path from "path";
 
 export default async function fetchXMProjects(req, res) {
   const projectId = req.query.projectid;
   const localPath = path.resolve(
     process.env.GITHUB_CLONE_FOLDER + "\\" + projectId
   );
+  console.log("localPath " + localPath);
   const powershellEt = new PowerShell();
   const accessTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
   let accessToken;
@@ -14,6 +16,8 @@ export default async function fetchXMProjects(req, res) {
     .then(
       (result) => {
         accessToken = result.success;
+  console.log("accessTokenPs " + accessToken);
+
       },
       (err) => {
         console.error(err);
@@ -32,5 +36,5 @@ export default async function fetchXMProjects(req, res) {
   );
   const body = await result.json();
   console.log("Projects " + body);
-  return res.status(200).json(body);
+  res.status(200).json(body);
 }

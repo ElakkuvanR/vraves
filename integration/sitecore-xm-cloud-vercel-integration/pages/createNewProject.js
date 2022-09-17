@@ -1,4 +1,4 @@
-import Layout from 'components/layout'
+import Layout from 'components/UI/layout'
 import XMCloudForm from 'components/xmcloudform'
 
 export default function CreateNewProject() {

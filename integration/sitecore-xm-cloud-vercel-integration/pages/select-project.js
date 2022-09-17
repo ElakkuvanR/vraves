@@ -1,35 +1,40 @@
-import React, { useEffect, useState, useRef } from "react"
-import Layout from 'components/layout'
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import Layout from "components/UI/layout";
 
 const ProjectSelection = () => {
   const clientId = useRef();
   const clientSecret = useRef();
-  const [projects, setProjects] = useState([])
-  const [environments, setEnvironments] = useState([])
+  const [projects, setProjects] = useState([]);
+  const [environments, setEnvironments] = useState([]);
   const selectedProject = useRef();
   const selectedEnvironment = useRef();
-
-  const fetchProjects = async () => {
-    const response = await fetch("/api/xmcloud/fetch-xm-projects")
-    const data = await response.json()
+  let vercelProjectid;
+  const fetchProjects = useCallback(async () => {
+    vercelProjectid = localStorage.getItem("projectid");
+    const response = await fetch(
+      `/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`
+    );
+    const data = await response.json();
+    console.log("data " + data);
+    setProjects(data);
     if (data.length >= 1) {
-      setProjects(data)
-      fetchEnvironments()
+      setProjects(data);
+      fetchEnvironments();
     }
-  }
+  }, []);
 
   const fetchEnvironments = async () => {
     const response = await fetch(
-      `/api/xmcloud/fetch-xm-environments?projectid=${selectedProject.current.value}`
-    )
-    const data = await response.json()
+      `/api/xmcloud/fetch-xm-environments?projectid=${selectedProject.current.value}&vercelprojid=${vercelProjectid}`
+    );
+    const data = await response.json();
     if (data.length >= 1) {
-      setEnvironments(data)
+      setEnvironments(data);
     }
-  }
+  };
 
-  const handleProjectSelection = event => {
-    fetchEnvironments()
+  const handleProjectSelection = (event) => {
+    fetchEnvironments();
   };
 
   const addProjectHandler = async (handler) => {
@@ -39,14 +44,16 @@ const ProjectSelection = () => {
   };
 
   useEffect(() => {
-    fetchProjects()
-  }, [])
+    fetchProjects();
+  }, [fetchProjects]);
 
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
         <section className="py-4 flex items-center space-x-2 justify-center">
-          <h1 className="text-lg font-medium">Setup Sitecore XM Cloud Project</h1>
+          <h1 className="text-lg font-medium">
+            Setup Sitecore XM Cloud Project
+          </h1>
         </section>
 
         <section className="py-4 ">
@@ -95,9 +102,12 @@ const ProjectSelection = () => {
             </label>
           </div>
           <div className="md:w-2/3">
-            <select className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              ref={selectedProject} onChange={handleProjectSelection}>
-              {projects.map(project => (
+            <select
+              className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              ref={selectedProject}
+              onChange={handleProjectSelection}
+            >
+              {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
                 </option>
@@ -113,9 +123,11 @@ const ProjectSelection = () => {
             </label>
           </div>
           <div className="md:w-2/3">
-            <select className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              ref={selectedEnvironment}>
-              {environments.map(environment => (
+            <select
+              className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              ref={selectedEnvironment}
+            >
+              {environments.map((environment) => (
                 <option key={environment.id} value={environment.id}>
                   {environment.name}
                 </option>
@@ -125,20 +137,20 @@ const ProjectSelection = () => {
         </div>
 
         <div className="md:flex md:items-center">
-        <div className="md:w-1/3"></div>
-        <div className="md:w-2/3">
-          <button
-            onClick={addProjectHandler}
-            className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-            type="button"
-          >
-            Setup Project
-          </button>
+          <div className="md:w-1/3"></div>
+          <div className="md:w-2/3">
+            <button
+              onClick={addProjectHandler}
+              className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              type="button"
+            >
+              Setup Project
+            </button>
+          </div>
         </div>
       </div>
-      </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default ProjectSelection
+export default ProjectSelection;

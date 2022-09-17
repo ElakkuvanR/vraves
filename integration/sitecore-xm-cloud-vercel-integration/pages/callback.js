@@ -1,10 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
-import Layout from "components/layout";
-import XMCloudForm from "components/xmcloudform";
-import CreateProjectPrompt from "components/createProjectPrompt";
-import GithubLogin from "components/githublogin";
 import TokenContext from "store/token-context";
+import Loader from "components/UI/loader";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -27,8 +24,8 @@ export default function CallbackPage() {
           `/api/vercel/fetch-project-by-id?code=${code}&projectId=${project}&token=${json.access_token}`
         );
         const projectJson = await projectResult.json();
-        console.log("project-details",projectJson);
-        localStorage.setItem("rootDirectory",projectJson.rootDirectory);
+        console.log("project-details", projectJson);
+        localStorage.setItem("rootDirectory", projectJson.rootDirectory);
         const projectRepoPath = `https://${projectJson.link.type}.com/${projectJson.link.org}/${projectJson.link.repo}.git`;
         ctx.setTokenValues(
           code,
@@ -39,7 +36,7 @@ export default function CallbackPage() {
         );
         console.log("ctx pid", ctx.projectid);
         console.log("ctx code", ctx.code);
-        router.push("/configure");
+        // router.push("/configure");
       };
       if (router.isReady) {
         const { code, currentProjectId, next } = router.query;
@@ -53,8 +50,8 @@ export default function CallbackPage() {
   );
 
   return (
-    <Layout>
-      
-    </Layout>
+    <>
+      <Loader text="Please hold on for a moment while we setup things in background !!!"></Loader>
+    </>
   );
 }
