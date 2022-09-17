@@ -29,6 +29,12 @@ const XMCloudForm = () => {
     const res = await fetch(
       `/api/xmcloud/create-xm-cloud-env?clientid=${clientId.current.value}&clientsecret=${clientSecret.current.value}&projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
     );
+    console.log('response xm cloud creation::', res);
+    const nextUrl = localStorage.getItem("next");
+    if(nextUrl){
+      console.log("New XM Cloud project configuration is done, redirecting to creationg");
+      window.location.replace(nextUrl);
+    }
   };
   return (
     <form className="w-full max-w-sm">
