@@ -8,6 +8,22 @@
       "refreshToken": "4F05BB7BD7D9C2BB830F78A4E0FD36194274161AB29EEB3E1F85A6653A3BFCFB",
       "clientId": "Device",
       "variables": {}
+    },
+    "xmCloud": {
+      "allowWrite": false,
+      "host": "https://xmclouddeploy-api.sitecorecloud.io/",
+      "authority": "https://auth.sitecorecloud.io/",
+      "useClientCredentials": true,
+      "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpnbnhyQk9IaXJ0WXp4dnl1WVhNZyJ9.eyJodHRwczovL2F1dGguc2l0ZWNvcmVjbG91ZC5pby9jbGFpbXMvb3JnX2lkIjoib3JnX3Qwam9PQjA5ZGpZbWlHWDQiLCJodHRwczovL2F1dGguc2l0ZWNvcmVjbG91ZC5pby9jbGFpbXMvb3JnX25hbWUiOiJ1bmF2ZXJob2V2ZW4xIiwiaHR0cHM6Ly9hdXRoLnNpdGVjb3JlY2xvdWQuaW8vY2xhaW1zL29yZ19kaXNwbGF5X25hbWUiOiJWYWx0ZWNoIiwiaHR0cHM6Ly9hdXRoLnNpdGVjb3JlY2xvdWQuaW8vY2xhaW1zL2NsaWVudF9uYW1lIjoieG1jbG91ZC10ZXN0IiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnNpdGVjb3JlY2xvdWQuaW8vIiwic3ViIjoieGU0WExBZTNDSHhXeGRyNXdySjBLNTJjUDZvQW1jQTFAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vYXBpLnNpdGVjb3JlY2xvdWQuaW8iLCJpYXQiOjE2NjM0MjQ0OTAsImV4cCI6MTY2MzQyNTM5MCwiYXpwIjoieGU0WExBZTNDSHhXeGRyNXdySjBLNTJjUDZvQW1jQTEiLCJzY29wZSI6InhtY2xvdWRkZXBsb3kucHJvamVjdHM6bWFuYWdlIHhtY2xvdWRkZXBsb3kuZW52aXJvbm1lbnRzOm1hbmFnZSB4bWNsb3VkZGVwbG95LmRlcGxveW1lbnRzOm1hbmFnZSB4bWNsb3VkLmNtOmFkbWluIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.cFTpiZ1MIpePcdM47YQv2NasAE10SDXd6tazVN3CppcFiMYrXXQ8L1fuBNOpEIBWfSmoAdFfpVnqAsKdvdxC9LTrYynt5WHAtJPM9FMQsNn4k8z4dfVBtuo0HNfboTJ_RV3me8-wxhCmehgCrVVSuW9dJMxT1LyyicYbAZyMQF9-fQKzqSN-W_zDRmR9oP6LICOCJ6w9I0zG0EDhafl3no1n6XElQyMLq6R2AnAKdKiAm8zpP8BG-IsJHB6OTeJJek18rFIJ5OEntzsPVLlZpU2bjAu7Q78bGrFdnSnBe57vdA5YvlXUtlH8rn9aX-2j5IRxoBJCloTFjrQ3mkZDBQ",
+      "refreshTokenParameters": {
+        "organization_id": "org_t0joOB09djYmiGX4"
+      },
+      "clientId": "xe4XLAe3CHxWxdr5wrJ0K52cP6oAmcA1",
+      "clientSecret": "Ud29GHJU_7v8ZceNKJmXufNGBxJxgYLpoFZa0R53s55vPF9HxxdaMQoVzLbawege",
+      "variables": {
+        "xmCloudMonitoringHost": "https://xmcloud-monitoring-api.sitecorecloud.io/"
+      },
+      "audience": "https://api.sitecorecloud.io"
     }
   },
   "$schema": "./schemas/UserConfiguration.schema.json"
