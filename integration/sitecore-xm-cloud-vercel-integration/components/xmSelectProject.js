@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useRef } from "react"
-import Layout from 'components/layout'
+import React, { useEffect, useState } from "react"
 
-const XMSelectProject = () => {
+const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
   const [projects, setProjects] = useState([])
   const [environments, setEnvironments] = useState([])
-  const selectedProject = useRef();
-  const selectedEnvironment = useRef();
+  
   let vercelProjectid;
 
   const fetchProjects = async () => {

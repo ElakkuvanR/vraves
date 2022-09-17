@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import Layout from 'components/layout'
 import { useRouter } from "next/router";
 import XMNewProject from 'components/XMNewProject'
@@ -9,14 +9,30 @@ const XMProjectConfiguration = () => {
 
   const clientId = useRef();
   const clientSecret = useRef();
+  const projectName = useRef();
+  const environmentName = useRef();
+  const selectedProject = useRef();
+  const selectedEnvironment = useRef();
 
   const isNewProject = (router.query.isNewProject === 'true');
   var projectSetupComponent;
   if (isNewProject) {
-    projectSetupComponent = <XMNewProject />
+    projectSetupComponent = <XMNewProject
+      projectName={projectName}
+      environmentName={environmentName}
+    />
   } else{
-    projectSetupComponent = <XMSelectProject />
+    projectSetupComponent = <XMSelectProject
+      selectedProject={selectedProject}
+      selectedEnvironment={selectedEnvironment}
+    />
   }
+
+  let projectId, code;
+  useEffect(() => {
+    projectId = localStorage.getItem("projectid");
+    code = localStorage.getItem("code");
+  });
 
   const addProjectHandler = async (handler) => {
     const vercelDomain = await fetch(
