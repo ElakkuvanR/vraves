@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from "react"
 import Layout from 'components/ui/layout'
 import SelectProjectType from 'components/SelectProjectType'
 import XMCloudLogin from 'components/xmcloudlogin';
-import XMSelectProject from 'components/xmSelectProject';
 
 export default function projectType() {
   const [showProjectType, setShowProjectType] = React.useState(false)
   const [showExistingProjectSelect, setShowExistingProjectSelect] = React.useState(false)
+  const [hideLogin, setHideLogin] = React.useState(false);
   
   //Log in XMCloud
   const xmcloudLogin = async (handler) => {
@@ -15,6 +15,7 @@ export default function projectType() {
     const loginResponse = await xmCloudLogin.json();
     if (loginResponse.IsAuthenticated) {
       console.log(loginResponse);
+      setHideLogin(true);
       setShowProjectType(true);
       const response = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`)
       const data = await response.json()
@@ -38,7 +39,7 @@ export default function projectType() {
             Setup Sitecore XM Cloud Project
           </h1>
         </section>
-        <XMCloudLogin {...loginProps} />
+        <XMCloudLogin {...loginProps} hideLogin={hideLogin} />
         <SelectProjectType showProjectType={showProjectType} showExistingProjectSelect={showExistingProjectSelect}  />
       </div>
     </Layout>

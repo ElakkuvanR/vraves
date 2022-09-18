@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import { render } from "react-dom";
-const XMCloudLogin = (props) => {
+const XMCloudLogin = (props, { hideLogin }) => {
     return (
         <>
-            <section className="py-4 ">
+            <section className="py-4 " style={{
+                display: hideLogin ? "none" : "inline"
+            }}>
                 <div className="space-y-2 text-center">
                     <h1 className="text-lg font-medium">
                         Please credentials to login Sitecore XM Cloud
