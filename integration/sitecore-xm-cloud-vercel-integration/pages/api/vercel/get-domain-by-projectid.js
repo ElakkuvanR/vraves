@@ -1,5 +1,5 @@
 import Cookies from "cookies";
-export default async function getEnvVariableForProject(req, res) {
+export default async function getDomainForProject(req, res) {
   const projectId = req.query.projectid;
   const domainName= req.query.domainName ?? "production";
 

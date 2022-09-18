@@ -5,6 +5,7 @@ export default async function getEnvVariableForProject(req, res) {
 
   const cookies = new Cookies(req, res);
   const accessToken = cookies.get("vat");
+  console.log("accesstoken", accessToken);
   const result = await fetch(`https://api.vercel.com/v9/projects/${projectId}/env`, {
     "headers": {
       "Authorization": `Bearer ${accessToken}`

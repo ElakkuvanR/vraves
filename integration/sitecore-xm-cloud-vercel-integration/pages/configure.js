@@ -15,7 +15,10 @@ export default function Configure() {
   useEffect(() => {
     const { code } = router.query;
     const cloneRepo = async (code) => {
-      const res = await fetch(apiUrl);
+      const res = await fetch(apiUrl).finally(()=>{
+        localStorage.removeItem("apiUrl");
+        router.push("/project-type");
+      });
       console.log("Clone Result " + res.json);
       params.status = "logged-in";
     };
@@ -35,8 +38,6 @@ export default function Configure() {
       localStorage.setItem("code", code);
       apiUrl = apiUrl + `&code=${code}`;
       cloneRepo(apiUrl);
-      localStorage.removeItem("apiUrl");
-      router.push("/project-type");
     }
   }, [router, ctx]);
 

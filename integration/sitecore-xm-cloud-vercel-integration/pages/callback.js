@@ -26,6 +26,7 @@ export default function CallbackPage() {
         const projectJson = await projectResult.json();
         console.log("project-details",projectJson);
         localStorage.setItem("rootDirectory",projectJson.rootDirectory);
+        localStorage.setItem("next",next);
         const projectRepoPath = `https://${projectJson.link.type}.com/${projectJson.link.org}/${projectJson.link.repo}.git`;
         ctx.setTokenValues(
           code,
