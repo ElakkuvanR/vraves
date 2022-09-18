@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useRef } from "react"
-import Layout from 'components/layout'
+import React, { useEffect, useState } from "react"
 
-const XMSelectProject = () => {
+const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
   const [projects, setProjects] = useState([])
   const [environments, setEnvironments] = useState([])
-  const selectedProject = useRef();
-  const selectedEnvironment = useRef();
+
   let vercelProjectid;
 
   const fetchProjects = async () => {
@@ -19,6 +17,7 @@ const XMSelectProject = () => {
   }
 
   const fetchEnvironments = async () => {
+    vercelProjectid = localStorage.getItem("projectid");
     const response = await fetch(
       `/api/xmcloud/fetch-xm-environments?projectid=${selectedProject.current.value}&vercelprojid=${vercelProjectid}`
     )
@@ -37,7 +36,10 @@ const XMSelectProject = () => {
   }, [])
 
   return (
-    <div>
+    <div className="space-y-2 text-center">
+      <h1 className="text-lg font-medium">
+        Please provide below details
+      </h1>
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
           <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
@@ -74,6 +76,7 @@ const XMSelectProject = () => {
         </div>
       </div>
     </div>
+
   )
 }
 

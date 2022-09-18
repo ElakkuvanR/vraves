@@ -1,24 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
-
-const XMNewProject = () => {
-  const projectName = useRef();
-  const environmentName = useRef();
-
-  client.onmessage = (message) => {
-    console.log("got reply! ", message.data);
-  };
-  client.onopen = () => {
-    console.log("Client connected");
-  };
-  let projectId, code;
-  useEffect(() => {
-    projectId = localStorage.getItem("projectid");
-    code = localStorage.getItem("code");
-  });
-  
+import React, { useRef } from "react";
+const XMNewProject = ({ projectName, environmentName }) => {
   return (
     <div>
       <div className="md:flex md:items-center mb-6">
