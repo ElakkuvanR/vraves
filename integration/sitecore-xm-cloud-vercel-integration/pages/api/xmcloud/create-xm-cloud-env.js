@@ -181,7 +181,7 @@ export default async function createXMCloudEnv(req, res) {
       "create-xm-cloud-env.js ----> User Access Token " + accessToken
     );
     console.log(
-      `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`
+      `create-xm-cloud-env.js ----> Token API Path ${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`
     );
     const result = await fetch(
       `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token/`,
