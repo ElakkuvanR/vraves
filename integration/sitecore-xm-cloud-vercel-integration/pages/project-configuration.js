@@ -45,13 +45,13 @@ const XMProjectConfiguration = () => {
         `/api/xmcloud/create-xm-cloud-env?projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
       const result = await resNewProject.json();
-      window.location.href(localStorage.getItem("next"));
+      // window.location.href(localStorage.getItem("next"));
     } else {
       const resExistingProject = await fetch(
         `/api/xmcloud/create-xm-cloud-env?environmentId=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
       const result = await resExistingProject.json();
-      window.location.href(localStorage.getItem("next"));
+      // window.location.href(localStorage.getItem("next"));
     }
   };
 
@@ -68,13 +68,13 @@ const XMProjectConfiguration = () => {
             >
               Setup Project
             </button>
-            <button
+            {/* <button
               onClick={router.back()}
               className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="button"
             >
               Go Back
-            </button>
+            </button> */}
           </div>
         </section>
         {/* <section className="py-4 ">

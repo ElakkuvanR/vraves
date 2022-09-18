@@ -5,7 +5,6 @@ import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 import useHttp from "hooks/use-http";
-import showLoader from "components/UI/showloader";
 
 export default function ConfigurePage() {
   const ctx = useContext(TokenContext);

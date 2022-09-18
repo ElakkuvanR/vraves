@@ -8,7 +8,7 @@ const XMCloudLogin = (props, { hideLogin }) => {
             }}>
                 <div className="space-y-2 text-center">
                     <h1 className="text-lg font-medium">
-                        Please credentials to login Sitecore XM Cloud
+                        Please enter your credentials to login Sitecore XM Cloud
                     </h1>
                     <div className="md:flex md:items-center mb-6">
                         <div className="md:w-1/3">

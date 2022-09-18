@@ -14,7 +14,7 @@ export default function CallbackPage() {
   const { accessToken } = useVercelToken();
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && accessToken) {
       console.log("Callback.js ----> vercel accessToken: " + accessToken);
       // Only if the Router is ready
       const { code, currentProjectId, next } = router.query;
@@ -46,6 +46,7 @@ export default function CallbackPage() {
             accessToken,
             `https://${result.link.type}.com/${result.link.org}/${result.link.repo}.git`
           );
+          document.cookie = `vat=${accessToken}`;
           router.push("/configure"); // Redirect to the Router page
         };
         // Get the VercelProject Details with Current Project ID
@@ -64,7 +65,7 @@ export default function CallbackPage() {
   }, [router, accessToken]);
   return (
     <>
-      <Loader text="Please hold on for a moment while we setup things in background !!!"></Loader>
+      <Loader text="Please hold on and have some coffee !!!"></Loader>
     </>
   );
 }

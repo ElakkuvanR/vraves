@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from "react"
-import Layout from 'components/ui/layout'
-import SelectProjectType from 'components/SelectProjectType'
-import XMCloudLogin from 'components/xmcloudlogin';
+import React, { useEffect, useRef } from "react";
+import Layout from "components/ui/layout";
+import SelectProjectType from "components/SelectProjectType";
+import XMCloudLogin from "components/xmcloudlogin";
 
 export default function projectType() {
-  const [showProjectType, setShowProjectType] = React.useState(false)
-  const [showExistingProjectSelect, setShowExistingProjectSelect] = React.useState(false)
+  const [showProjectType, setShowProjectType] = React.useState(false);
+  const [showExistingProjectSelect, setShowExistingProjectSelect] =
+    React.useState(false);
   const [hideLogin, setHideLogin] = React.useState(false);
-  
+
   //Log in XMCloud
   const xmcloudLogin = async (handler) => {
     document.getElementById("globalLoader").style.display = "block";
@@ -45,8 +46,13 @@ export default function projectType() {
             Setup Sitecore XM Cloud Project
           </h1>
         </section>
-        <XMCloudLogin {...loginProps} hideLogin={hideLogin} />
-        <SelectProjectType showProjectType={showProjectType} showExistingProjectSelect={showExistingProjectSelect}  />
+        {!hideLogin && <XMCloudLogin {...loginProps} hideLogin={hideLogin} />}
+        {hideLogin && (
+          <SelectProjectType
+            showProjectType={showProjectType}
+            showExistingProjectSelect={showExistingProjectSelect}
+          />
+        )}
       </div>
     </Layout>
   );
