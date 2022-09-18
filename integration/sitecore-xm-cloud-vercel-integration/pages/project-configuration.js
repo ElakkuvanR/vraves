@@ -48,7 +48,7 @@ const XMProjectConfiguration = () => {
       window.location.href(localStorage.getItem("next"));
     } else {
       const resExistingProject = await fetch(
-        `/api/xmcloud/create-xm-cloud-env?environmentName=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
+        `/api/xmcloud/create-xm-cloud-env?environmentId=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
       const result = await resExistingProject.json();
       window.location.href(localStorage.getItem("next"));

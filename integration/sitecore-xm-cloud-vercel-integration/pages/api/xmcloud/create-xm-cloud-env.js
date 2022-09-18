@@ -9,7 +9,7 @@ export default async function createXMCloudEnv(req, res) {
   const localPath = path.resolve(
     process.env.GITHUB_CLONE_FOLDER + "\\" + req.query.projectid
   );
-
+  let environmentId = req.query.environmentId;
   try {
     const powershell = new PowerShell({
       tmp_dir: process.env.PWSH_LOG_FOLDER ?? "C:\\log\\",
@@ -36,40 +36,43 @@ export default async function createXMCloudEnv(req, res) {
       console.log('.env file created');
     });
 
-    // Project Create
-    const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
-    let environmentCreationPs;
-    const resultProjectCreation = await powershell
-      .call(projectCreationPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          environmentCreationPs = result.success?.pop();
-          console.log("environmentCreationPs : " + environmentCreationPs);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
+    if (environmentId === undefined) {
+      // Project Create
+      const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
+      let environmentCreationPs;
+      const resultProjectCreation = await powershell
+        .call(projectCreationPs, "string")
+        .promise()
+        .then(
+          (result) => {
+            environmentCreationPs = result.success?.pop();
+            console.log("environmentCreationPs : " + environmentCreationPs);
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
 
-    // // Environment Create
-    environmentCreationPs = String(environmentCreationPs)
-      .replace("<environment-name>", req.query.environmentName)
-      .trim();
-    environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
-    let environmentId;
-    const envResult = await powershell
-      .call(environmentCreationPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          environmentId = extractEnvironmentId(result.success.pop());
-          console.log("environmentId : " + environmentId);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
+      // // Environment Create
+      environmentCreationPs = String(environmentCreationPs)
+        .replace("<environment-name>", req.query.environmentName)
+        .trim();
+      environmentCreationPs = environmentCreationPs.replace(/(?:\\[rn])+/g, "");
+
+      const envResult = await powershell
+        .call(environmentCreationPs, "string")
+        .promise()
+        .then(
+          (result) => {
+            environmentId = extractEnvironmentId(result.success.pop());
+            console.log("environmentId : " + environmentId);
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+    }
+
     // Processing the build Json File
     if (fs.existsSync(`${localPath}` + "\\xmcloud.build.json")) {
       var buildFileJson = JSON.parse(
