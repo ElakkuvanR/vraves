@@ -20,7 +20,7 @@ export default function Layout(props) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+         The XM Cloud Integaration with Vercel Powered by{' '}
           <img src="/xmcloud-vercel.png" alt="XMCloud-Vercel Logo" style={logoStyle} />
         </a>
       </footer>

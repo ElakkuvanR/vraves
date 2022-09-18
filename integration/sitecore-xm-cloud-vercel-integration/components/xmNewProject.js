@@ -27,9 +27,9 @@ const XMNewProject = () => {
             Project Name
           </label>
         </div>
-        <div className="md:w-2/3">
+        <div className="md:w-2/4">
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
             id="projectname"
             type="text"
             ref={projectName}
@@ -42,9 +42,9 @@ const XMNewProject = () => {
             Environment Name
           </label>
         </div>
-        <div className="md:w-2/3">
+        <div className="md:w-2/4">
           <input
-            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
             id="environmentName"
             type="text"
             ref={environmentName}
