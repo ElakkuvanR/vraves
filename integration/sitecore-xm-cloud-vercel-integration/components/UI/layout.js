@@ -7,7 +7,7 @@ export default function Layout(props) {
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
-        <title>Example Integration</title>
+        <title>XM Cloud Vercel Integration</title>
         <link rel="icon" href="/xmcloud-vercel.ico" />
       </Head>
       <div className="flex-1 flex items-center justify-center">
