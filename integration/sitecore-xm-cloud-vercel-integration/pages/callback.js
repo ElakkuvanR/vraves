@@ -1,58 +1,57 @@
 import { useEffect, useState, useContext } from "react";
-import { useRouter } from "next/router";
-import Layout from "components/layout";
+import Router, { useRouter } from "next/router";
+import useHttp from "hooks/use-http";
 import TokenContext from "store/token-context";
+import Loader from "components/UI/loader";
+import useVercelToken from "lib/vercel/get-vercel-token";
+import setValueToLocalStorage from "lib/helpers/set-local-storage";
 
 export default function CallbackPage() {
+  // Hooks Initialization
   const router = useRouter();
-  const query = router.query;
-  const [data, setData] = useState({});
-  const [projects, setProjects] = useState();
+  const { sendRequest, isLoading, error } = useHttp();
   const ctx = useContext(TokenContext);
+  const { accessToken } = useVercelToken();
 
-  useEffect(
-    () => {
-      const fetchAccessToken = async (code, project, next) => {
-        const res = await fetch(`/api/vercel/get-access-token?code=${code}`);
-        const json = await res.json();
-        setData({
-          accessToken: json.access_token,
-          userId: json.user_id,
-          teamId: json.team_id,
-        });
-        const projectResult = await fetch(
-          `/api/vercel/fetch-project-by-id?code=${code}&projectId=${project}&token=${json.access_token}`
+  useEffect(() => {
+    if (router.isReady) {
+      console.log("Callback.js ----> vercel accessToken: " + accessToken);
+      // Only if the Router is ready
+      const { code, currentProjectId, next } = router.query;
+      if (code) {
+        const fetchProjectDetails_Callback = async (result) => {
+          // CallBack function
+          setValueToLocalStorage("rootDirectory", result.rootDirectory);
+          console.log(
+            "Callback.js ----> Repo Url: " +
+              `https://${result.link.type}.com/${result.link.org}/${result.link.repo}.git`
+          );
+          ctx.setTokenValues(
+            code,
+            currentProjectId,
+            next,
+            accessToken,
+            `https://${result.link.type}.com/${result.link.org}/${result.link.repo}.git`
+          );
+          router.push("/configure"); // Redirect to the Router page
+        };
+        // Get the VercelProject Details with Current Project ID
+        sendRequest(
+          {
+            url: `${process.env.VERCEL_GET_PROJECT_ID_URL}${currentProjectId}`,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+          fetchProjectDetails_Callback,
+          false
         );
-        const projectJson = await projectResult.json();
-        console.log("project-details",projectJson);
-        localStorage.setItem("rootDirectory",projectJson.rootDirectory);
-        localStorage.setItem("next",next);
-        const projectRepoPath = `https://${projectJson.link.type}.com/${projectJson.link.org}/${projectJson.link.repo}.git`;
-        ctx.setTokenValues(
-          code,
-          project,
-          next,
-          json.access_token,
-          projectRepoPath
-        );
-        console.log("ctx pid", ctx.projectid);
-        console.log("ctx code", ctx.code);
-        router.push("/configure");
-      };
-      if (router.isReady) {
-        const { code, currentProjectId, next } = router.query;
-        if (!data.accessToken) {
-          fetchAccessToken(code, currentProjectId, next);
-        }
       }
-    },
-    [router],
-    [data]
-  );
-
+    }
+  }, [router, accessToken]);
   return (
-    <Layout>
-      
-    </Layout>
+    <>
+      <Loader text="Please hold on for a moment while we setup things in background !!!"></Loader>
+    </>
   );
 }
