@@ -57,24 +57,26 @@ const XMProjectConfiguration = () => {
 
   return (
     <Layout>
-      <form className="w-full max-w-sm">
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
         <section className="py-4 ">
           <div className="space-y-2 text-center">
             {projectSetupComponent}
+            <div className="w-full px-6 pb-6 ml-auto text-gray-500 md:w-1/3">
             <button
               onClick={addProjectHandler}
-              className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              className="py-2 px-4  bg-gray-600 hover:bg-gray-800 focus:ring-gray-500 focus:ring-offset-gray-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
               type="button"
             >
               Setup Project
             </button>
-            <button
+            </div>
+            {/* <button
               onClick={router.back()}
               className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="button"
             >
               Go Back
-            </button>
+            </button> */}
           </div>
         </section>
         {/* <section className="py-4 ">

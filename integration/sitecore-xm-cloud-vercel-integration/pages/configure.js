@@ -5,7 +5,6 @@ import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 import useHttp from "hooks/use-http";
-import showLoader from "components/UI/showloader";
 
 export default function ConfigurePage() {
   const ctx = useContext(TokenContext);
@@ -54,6 +53,7 @@ export default function ConfigurePage() {
 
   return (
     <Layout>
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
       <div className="space-y-2 text-center">
         <h1 className="text-lg font-medium">
           Let us connect your repo in order to deploy to Sitecore XM Cloud
@@ -62,6 +62,7 @@ export default function ConfigurePage() {
           <GithubLogin {...params} />
         </section>
       </div>
+      </form>
     </Layout>
   );
 }
