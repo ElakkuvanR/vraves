@@ -8,7 +8,11 @@ export default async function fetchXMEnvironments(req, res) {
     process.env.GITHUB_CLONE_FOLDER + "\\" + vercelProjectId
   );
   console.log("Path in localPath" + localPath);
-  const powershellEt = new PowerShell();
+  const powershellEt = new PowerShell({
+    tmp_dir: process.env.PWSH_LOG_FOLDER ?? "C:\\log\\",
+    timeout: 12000000,
+    exe_path: 'pwsh'
+  });
   const accessTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
   let accessToken;
   await powershellEt

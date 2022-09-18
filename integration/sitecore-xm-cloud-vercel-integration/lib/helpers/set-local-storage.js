@@ -1,5 +1,15 @@
 // Set the values to local storage
-export default function setValueToLocalStorage(key, value) {
-  localStorage.setItem(key, value);
+function setValueToLocalStorage(key, value) {
+  const objKey = Object.keys(key)[0];
+  const objValue = key[objKey];
+  localStorage.setItem(objKey, objValue);
 }
 
+function setCollectionToLocalStorage(obj) {
+  const arr = [...obj];
+  obj.forEach((key) => {
+    setValueToLocalStorage(key);
+  });
+}
+
+export default setCollectionToLocalStorage;

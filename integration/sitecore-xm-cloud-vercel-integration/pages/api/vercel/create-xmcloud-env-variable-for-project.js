@@ -16,7 +16,7 @@ export default async function createXMCloudEnvVariableForProject(req, res) {
         },
         {
           key: "GRAPH_QL_ENDPOINT",
-          value: `${req.query?.GraphQLEndpoint}` ?? "https://edge.sitecorecloud.io/api/graphql/v1",
+          value: `${req.query?.GraphQLEndpoint ?? "https://edge.sitecorecloud.io/api/graphql/v1"}` ,
           target: ["production"],
           type: "plain"
         },
@@ -28,7 +28,7 @@ export default async function createXMCloudEnvVariableForProject(req, res) {
         },
         {
           key: "SITECORE_API_HOST",
-          value: `${req.query?.SitecoreApiHost}` ?? "https://edge.sitecorecloud.io/",
+          value: `${req.query?.SitecoreApiHost ?? "https://edge.sitecorecloud.io/"}` ,
           target: ["production"],
           type: "plain"
         },

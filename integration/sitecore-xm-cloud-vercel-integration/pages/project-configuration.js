@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import Layout from 'components/layout'
+import Layout from 'components/ui/layout'
 import { useRouter } from "next/router";
 import XMNewProject from 'components/XMNewProject'
 import XMSelectProject from 'components/XMSelectProject'
@@ -19,7 +19,7 @@ const XMProjectConfiguration = () => {
       projectName={projectName}
       environmentName={environmentName}
     />
-  } else{
+  } else {
     projectSetupComponent = <XMSelectProject
       selectedProject={selectedProject}
       selectedEnvironment={selectedEnvironment}
@@ -44,20 +44,23 @@ const XMProjectConfiguration = () => {
       const resNewProject = await fetch(
         `/api/xmcloud/create-xm-cloud-env?projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
+      const result = await resNewProject.json();
+      window.location.href(localStorage.getItem("next"));
     } else {
       const resExistingProject = await fetch(
-        `/api/xmcloud/create-xm-cloud-env?environmentName=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
+        `/api/xmcloud/create-xm-cloud-env?environmentId=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
+      const result = await resExistingProject.json();
+      window.location.href(localStorage.getItem("next"));
     }
   };
 
   return (
     <Layout>
       <form className="w-full max-w-sm">
-        {projectSetupComponent}
-        <div className="md:flex md:items-center">
-          <div className="md:w-1/3"></div>
-          <div className="md:w-2/3">
+        <section className="py-4 ">
+          <div className="space-y-2 text-center">
+            {projectSetupComponent}
             <button
               onClick={addProjectHandler}
               className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
@@ -65,8 +68,29 @@ const XMProjectConfiguration = () => {
             >
               Setup Project
             </button>
+            <button
+              onClick={router.back()}
+              className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              type="button"
+            >
+              Go Back
+            </button>
           </div>
-        </div>
+        </section>
+        {/* <section className="py-4 ">
+          <div className="md:flex md:items-center">
+            <div className="md:w-2/3"> */}
+
+              {/* <button
+              onClick={router.back()}
+              className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+              type="button"
+            >
+              Go Back
+            </button> */}
+            {/* </div>
+          </div>
+        </section> */}
       </form>
     </Layout>
   )

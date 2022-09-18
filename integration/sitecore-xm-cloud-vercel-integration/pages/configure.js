@@ -1,43 +1,54 @@
 import { useEffect, useContext, useState } from "react";
 import GithubLogin from "components/githublogin";
-import Layout from "components/UI/layout";
+import Layout from "components/ui/layout";
 import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
+import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
+import useHttp from "hooks/use-http";
+import showLoader from "components/UI/showloader";
 
-// The URL of this page should be added as Configuration URL in your integration settings on Vercel
-export default function Configure() {
+export default function ConfigurePage() {
   const ctx = useContext(TokenContext);
+  const { sendRequest } = useHttp();
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
-  const [data, setData] = useState("");
   const params = {
     status: "",
   };
   useEffect(() => {
     const { code } = router.query;
-    const cloneRepo = async (code) => {
-      const res = await fetch(apiUrl).finally(()=>{
-        localStorage.removeItem("apiUrl");
-        router.push("/project-type");
-      });
-      console.log("Clone Result " + res.json);
-      params.status = "logged-in";
-    };
-    let apiUrl = localStorage.getItem("apiUrl");
-    console.log("config ctx pid", ctx.projectid);
-    console.log("config ctx code", ctx.code);
-    if (!apiUrl) {
-      apiUrl = `/api/git/cloneRepository?projectid=${ctx.projectid}&repo=${ctx.repourl}`;
-      const projectIdStore = `${ctx.projectid}`;
-      localStorage.setItem("apiUrl", apiUrl);
-      console.log("projectIdStore " + projectIdStore);
-      localStorage.setItem("projectid", projectIdStore);
-    }
-    console.log("Clone repo called");
-    if (router.isReady && code) {
-      console.log("router");      
-      localStorage.setItem("code", code);
-      apiUrl = apiUrl + `&code=${code}`;
-      cloneRepo(apiUrl);
+    setIsLoading(true);
+    if (router.isReady) {
+      // Only if the router is ready
+      const cloneRepoCallBack = (result) => {
+        // Can be empty
+      };
+      let apiUrl = localStorage.getItem("apiUrl");
+      if (!apiUrl) {
+        apiUrl = `${process.env.GIT_CLONE_REDIRECT_URL}?projectid=${ctx.projectid}&repo=${ctx.repourl}`;
+        setCollectionToLocalStorage([
+          {
+            apiUrl: apiUrl,
+          },
+        ]);
+      }
+      console.log("Configure.js ----> ApiUrl: " + apiUrl);
+      if (router.isReady && code) {
+        apiUrl = apiUrl + `&code=${code}`;
+        sendRequest(
+          {
+            url: `${apiUrl}`,
+          },
+          cloneRepoCallBack,
+          false
+        ).finally(() => {
+          params.status = "logged-in";
+          localStorage.removeItem("apiUrl");
+          setIsLoading(false);
+          router.push("/project-type");
+        });
+      }
     }
   }, [router, ctx]);
 

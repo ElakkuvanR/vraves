@@ -7,6 +7,7 @@ const useHttp = () => {
   const sendRequest = useCallback(
     async (requestConfig, applyData, shouldConvert) => {
       setIsLoading(true);
+      document.getElementById("globalLoader").style.display = "block";
       setError(null);
       try {
         const response = await fetch(requestConfig.url, {
@@ -29,6 +30,7 @@ const useHttp = () => {
         setError(err.message || "Something went wrong!");
       }
       setIsLoading(false);
+      document.getElementById("globalLoader").style.display = "none";
     },
     []
   );
