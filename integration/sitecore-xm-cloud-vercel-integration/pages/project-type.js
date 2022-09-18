@@ -12,7 +12,7 @@ export default function projectType() {
   //Log in XMCloud
   const xmcloudLogin = async (handler) => {
     const vercelProjectid = localStorage.getItem("projectid");
-    const xmCloudLogin = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}&clientid=${loginProps.clientId}&clientsecret=${loginProps.clientSecret}`);
+    const xmCloudLogin = await fetch(`/api/xmcloud/xm-cloud-login?projectid=${vercelProjectid}&clientid=${loginProps.clientId}&clientsecret=${loginProps.clientSecret}`);
     const loginResponse = await xmCloudLogin.json();
     if(loginResponse.IsAuthenticated){
       const response = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`)
