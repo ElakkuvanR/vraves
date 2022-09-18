@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import Layout from 'components/layout'
+import Layout from 'components/ui/layout'
 import SelectProjectType from 'components/SelectProjectType'
 import XMCloudLogin from 'components/xmcloudlogin';
 import XMSelectProject from 'components/xmSelectProject';
