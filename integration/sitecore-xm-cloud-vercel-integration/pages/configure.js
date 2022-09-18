@@ -39,6 +39,7 @@ export default function ConfigurePage() {
           cloneRepoCallBack,
           false
         ).finally(() => {
+          params.status = "logged-in";
           localStorage.removeItem("apiUrl");
           router.push("/project-type");
         });
