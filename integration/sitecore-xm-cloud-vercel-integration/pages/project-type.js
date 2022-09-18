@@ -1,7 +1,34 @@
+import React, { useEffect, useRef } from "react"
 import Layout from 'components/layout'
 import SelectProjectType from 'components/SelectProjectType'
+import XMCloudLogin from 'components/xmcloudlogin';
+import XMSelectProject from 'components/xmSelectProject';
 
 export default function projectType() {
+  const selectProjectProps = {
+    loggedin: false,
+    hasprojects: false
+  };
+  //Log in XMCloud
+  const xmcloudLogin = async (handler) => {
+    const vercelProjectid = localStorage.getItem("projectid");
+    const xmCloudLogin = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}&clientid=${loginProps.clientId}&clientsecret=${loginProps.clientSecret}`);
+    const loginResponse = await xmCloudLogin.json();
+    if(loginResponse.IsAuthenticated){
+      const response = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`)
+      const data = await response.json()
+      if (data.length >= 1) {
+        selectProjectProps.hasprojects = true;
+      }
+    }
+  }
+
+  const loginProps = {
+    clientId: useRef(),
+    clientSecret: useRef(),
+    login: xmcloudLogin
+  };
+
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
@@ -10,30 +37,9 @@ export default function projectType() {
             Setup Sitecore XM Cloud Project
           </h1>
         </section>
-
-        <section className="py-4 ">
-          <div className="space-y-2 text-center">
-            <h1 className="text-lg font-medium">
-              Please provide below details
-            </h1>
-            <section className="py-4 flex justify-center">
-              <SelectProjectType />
-            </section>
-          </div>
-        </section>
-
-        <section className="py-4 flex justify-center">
-          {/* This redirect should happen programmatically if you're done with everything on your side */}
-          <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            onClick={() => {
-              router.push(router.query.next);
-            }}
-          >
-            Redirect me back to Vercel
-          </button>
-        </section>
+        <XMCloudLogin {...loginProps}/>
+        <SelectProjectType {...selectProjectProps} />
       </div>
-    </Layout>    
+    </Layout>
   )
 }

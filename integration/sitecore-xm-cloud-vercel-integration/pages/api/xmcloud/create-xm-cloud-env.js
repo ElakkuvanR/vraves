@@ -35,33 +35,6 @@ export default async function createXMCloudEnv(req, res) {
       if (err) throw err;
       console.log('.env file created');
     });
-    // Navigate to Project Folder
-    const toolRestore = `dotnet tool restore`;
-    await powershell
-      .call(toolRestore, "string")
-      .promise()
-      .then(
-        (result) => {
-          console.log(result.success);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
-
-    // Login
-    const loginPs = `dotnet sitecore cloud login --client-credentials --client-id ${req.query.clientid} --client-secret ${req.query.clientsecret}`;
-    await powershell
-      .call(loginPs, "string")
-      .promise()
-      .then(
-        (result) => {
-          console.log(result.success);
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
 
     // Project Create
     const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
@@ -104,13 +77,13 @@ export default async function createXMCloudEnv(req, res) {
       );
       console.log(buildFileJson);
       const domainName = req.query.domain;
-      const rootDirectory= req.query.rootDirectory;
+      const rootDirectory = req.query.rootDirectory;
       const renderingHost = buildFileJson.renderingHosts;
-      for (var key in renderingHost) {     
-        console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());   
-        if(buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0){         
-             const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;          
-             fs.appendFileSync(`${localPath}` + "\\.env", "\n"+`${envVariable}=${domainName}`);          
+      for (var key in renderingHost) {
+        console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());
+        if (buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0) {
+          const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
+          fs.appendFileSync(`${localPath}` + "\\.env", "\n" + `${envVariable}=${domainName}`);
         }
       }
     }
@@ -173,6 +146,8 @@ export default async function createXMCloudEnv(req, res) {
         }
       );
 
+    powershell.destroy();
+
     // console.log("Access Token " + accessToken);
     const result = await fetch(
       `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`,
@@ -186,14 +161,14 @@ export default async function createXMCloudEnv(req, res) {
     const body = await result.json();
     console.log("Edge Access Token " + body);
     const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${body}`, {
-      headers : req.headers
+      headers: req.headers
     });
     const varResJson = await resultEnvVariables.json();
-    console.log(varResJson); 
+    console.log(varResJson);
   } catch (error) {
     console.log(error);
     //remove cloned project
-    fs.rmSync(localPath, { recursive: true, force: true });
+    //fs.rmSync(localPath, { recursive: true, force: true });
   }
 
 }
