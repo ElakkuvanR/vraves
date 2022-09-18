@@ -5,16 +5,20 @@ import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 import useHttp from "hooks/use-http";
+import showLoader from "components/UI/showloader";
 
 export default function ConfigurePage() {
   const ctx = useContext(TokenContext);
-  const { sendRequest, isLoading, error } = useHttp();
+  const { sendRequest } = useHttp();
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
   const params = {
     status: "",
   };
   useEffect(() => {
     const { code } = router.query;
+    setIsLoading(true);
     if (router.isReady) {
       // Only if the router is ready
       const cloneRepoCallBack = (result) => {
@@ -41,6 +45,7 @@ export default function ConfigurePage() {
         ).finally(() => {
           params.status = "logged-in";
           localStorage.removeItem("apiUrl");
+          setIsLoading(false);
           router.push("/project-type");
         });
       }
