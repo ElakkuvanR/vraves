@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import Layout from 'components/layout'
+import Layout from 'components/ui/layout'
 import { useRouter } from "next/router";
 import XMNewProject from 'components/XMNewProject'
 import XMSelectProject from 'components/XMSelectProject'
@@ -44,10 +44,14 @@ const XMProjectConfiguration = () => {
       const resNewProject = await fetch(
         `/api/xmcloud/create-xm-cloud-env?projectname=${projectName.current.value}&environmentName=${environmentName.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
+      const result = await resNewProject.json();
+      window.location.href(localStorage.getItem("next"));
     } else {
       const resExistingProject = await fetch(
         `/api/xmcloud/create-xm-cloud-env?environmentName=${selectedEnvironment.current.value}&projectid=${projectId}&domain=${domainsResult?.domains[0]?.name}&rootDirectory=${vercelRootDirectory}`
       );
+      const result = await resExistingProject.json();
+      window.location.href(localStorage.getItem("next"));
     }
   };
 

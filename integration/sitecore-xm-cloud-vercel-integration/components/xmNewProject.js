@@ -1,17 +1,5 @@
 import React, { useRef } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-
-const client = new W3CWebSocket("ws://127.0.0.1:8000");
-
 const XMNewProject = ({ projectName, environmentName }) => {
-
-  client.onmessage = (message) => {
-    console.log("got reply! ", message.data);
-  };
-  client.onopen = () => {
-    console.log("Client connected");
-  };
-  
   return (
     <div>
       <div className="md:flex md:items-center mb-6">
