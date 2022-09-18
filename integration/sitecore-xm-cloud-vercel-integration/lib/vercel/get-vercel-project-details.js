@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import useHttp from "hooks/use-http";
 
+// This hook is not used and to be checked 
 export default function useVercelProjectDetails(token) {
   const [data, setData] = useState({});
   const router = useRouter();

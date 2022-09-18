@@ -23,7 +23,7 @@ export default function useVercelProjectDetails() {
       // Get the Vercel Access Token First
       sendRequest(
         {
-          url: `https://api.vercel.com/v2/oauth/access_token`,
+          url: `${process.env.VERCEL_GET_TOKEN_URL}`,
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },

@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import GithubLogin from "components/githublogin";
-import Layout from "components/layout";
+import Layout from "components/UI/layout";
 import { useRouter, Router } from "next/router";
 import TokenContext from "store/token-context";
 
