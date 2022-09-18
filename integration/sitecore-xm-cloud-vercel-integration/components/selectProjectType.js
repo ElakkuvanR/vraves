@@ -1,13 +1,14 @@
 import Link from 'next/link'
 
-const SelectProjectType = () => {    
+const SelectProjectType = (props) => {
     return (
-        <div className="w-full max-w-xl divide-y">
-            {/* <section className="py-4 flex items-center space-x-2 justify-center">
-                <h1 className="text-lg font-medium">Please select an option :</h1>
-            </section> */}
+        <div className="w-full max-w-xl divide-y" style={{
+            display: props?.loggedin === true ? "inline" : "none"
+        }}>
             <div className="p-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
-                <section className="py-4 flex justify-center">
+                <section className="py-4 flex justify-center" style={{
+                    display: props?.hasprojects === true ? "inline" : "none"
+                }}>
                     <Link href="/project-configuration?isNewProject=false">
                         <a className="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md 
                         hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -29,8 +30,8 @@ const SelectProjectType = () => {
                     </Link>
                 </section>
             </div>
-        </div>    
+        </div>
     );
-  };
-  
-  export default SelectProjectType;
+};
+
+export default SelectProjectType;
