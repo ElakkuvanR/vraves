@@ -159,8 +159,8 @@ export default async function createXMCloudEnv(req, res) {
       }
     );
     const body = await result.json();
-    console.log("Edge Access Token " + body);
-    const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${body}`, {
+    console.log("Edge Access Token " + body.apiKey);
+    const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${body.apiKey}`, {
       headers: req.headers
     });
     const varResJson = await resultEnvVariables.json();

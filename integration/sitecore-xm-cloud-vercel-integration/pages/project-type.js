@@ -5,20 +5,21 @@ import XMCloudLogin from 'components/xmcloudlogin';
 import XMSelectProject from 'components/xmSelectProject';
 
 export default function projectType() {
-  const selectProjectProps = {
-    loggedin: false,
-    hasprojects: false
-  };
+  const [showProjectType, setShowProjectType] = React.useState(false)
+  const [showExistingProjectSelect, setShowExistingProjectSelect] = React.useState(false)
+  
   //Log in XMCloud
   const xmcloudLogin = async (handler) => {
     const vercelProjectid = localStorage.getItem("projectid");
-    const xmCloudLogin = await fetch(`/api/xmcloud/xm-cloud-login?projectid=${vercelProjectid}&clientid=${loginProps.clientId}&clientsecret=${loginProps.clientSecret}`);
+    const xmCloudLogin = await fetch(`/api/xmcloud/xm-cloud-login?projectid=${vercelProjectid}&clientid=${loginProps.clientId.current.value}&clientsecret=${loginProps.clientSecret.current.value}`);
     const loginResponse = await xmCloudLogin.json();
-    if(loginResponse.IsAuthenticated){
+    if (loginResponse.IsAuthenticated) {
+      console.log(loginResponse);
+      setShowProjectType(true);
       const response = await fetch(`/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`)
       const data = await response.json()
       if (data.length >= 1) {
-        selectProjectProps.hasprojects = true;
+        setShowExistingProjectSelect(true);
       }
     }
   }
@@ -37,8 +38,8 @@ export default function projectType() {
             Setup Sitecore XM Cloud Project
           </h1>
         </section>
-        <XMCloudLogin {...loginProps}/>
-        <SelectProjectType {...selectProjectProps} />
+        <XMCloudLogin {...loginProps} />
+        <SelectProjectType showProjectType={showProjectType} showExistingProjectSelect={showExistingProjectSelect}  />
       </div>
     </Layout>
   )

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { render } from "react-dom";
 const XMCloudLogin = (props) => {
     return (
         <>

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import Router, { useRouter } from "next/router";
 import useHttp from "hooks/use-http";
 import TokenContext from "store/token-context";
-import Loader from "components/UI/loader";
+import Loader from "components/ui/loader";
 import useVercelToken from "lib/vercel/get-vercel-token";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 
