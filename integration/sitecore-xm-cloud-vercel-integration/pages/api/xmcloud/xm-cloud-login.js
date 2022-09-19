@@ -1,6 +1,6 @@
 import { PowerShell } from "full-powershell";
 import path from "path";
-import fs from "fs";
+import axios from "axios";
 
 export default async function XMCloudLogin(req, res) {
     res.setHeader("Content-Type", "text/html;charset=utf-8");
@@ -22,6 +22,7 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
+                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
             },
             (err) => {
                 console.error(err);
@@ -36,6 +37,7 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
+                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
             },
             (err) => {
                 console.error(err);
@@ -50,6 +52,7 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
+                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
                 return res.status(200).json({ message: "SuccessFully LoggedIn", IsAuthenticated: true });
             },
             (err) => {

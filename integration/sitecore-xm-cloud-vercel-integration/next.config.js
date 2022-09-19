@@ -9,5 +9,6 @@ module.exports = {
     VERCEL_CLIENT_ID: process.env.VERCEL_CLIENT_ID,
     VERCEL_CLIENT_SECRET: process.env.VERCEL_CLIENT_SECRET,
     VERCEL_REDIRECT_HOST: process.env.HOST,
+    NEXT_PUBLIC_KEY: process.env.NEXT_PUBLIC_KEY
   },
 };
