@@ -4,6 +4,10 @@ export default function Layout(props) {
   const logoStyle = {
     maxWidth: "15%"
   };
+  const paddingTopFooter = {
+    paddingTop: "0",
+    paddingBottom: "1.5%"
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
@@ -20,7 +24,7 @@ export default function Layout(props) {
           target="_blank"
           rel="noopener noreferrer"
         >
-         <img src="/xmcloud-vercel.png" alt="XMCloud-Vercel Logo" style={logoStyle} /> {'  '} The XM Cloud Integaration with Vercel Powered by V_RAVES
+         <img src="/xmcloud-vercel.png" alt="XMCloud-Vercel Logo" style={logoStyle} /> {'  '} <p style={paddingTopFooter}>The XM Cloud Integaration with Vercel Powered by V_RAVES</p>
         </a>
       </footer>
     </div>

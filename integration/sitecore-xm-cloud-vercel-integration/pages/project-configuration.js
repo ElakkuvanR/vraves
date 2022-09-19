@@ -61,14 +61,14 @@ const XMProjectConfiguration = () => {
 
   return (
     <Layout>
-      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4 bg-selectproject bg-no-repeat bg-cover bg-center rounded-lg">
         <section className="py-4 ">
           <div className="space-y-2 text-center">
             {projectSetupComponent}
             <div className="w-full px-6 pb-6 ml-auto text-gray-500 md:w-1/3">
             <button
               onClick={addProjectHandler}
-              className="py-2 px-4  bg-gray-600 hover:bg-gray-800 focus:ring-gray-500 focus:ring-offset-gray-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+              className="py-2 px-4 rounded-lg bg-gray-800 border-2 border-transparent text-white text-md mr-4 hover:bg-gray-800"
               type="button"
             >
               Setup Project
