@@ -164,8 +164,8 @@ services:
       SUGCONEU_RENDERING_HOST_ENDPOINT_URI: "${SUGCONEU_RENDERING_HOST_ENDPOINT_URL}/api/editing/render"
       SUGCONEU_RENDERING_HOST_PUBLIC_URI: "https://${SUGCONEU_RENDERING_HOST_ENDPOINT_URL}"
       ## SugconAnzsugcon/ Rendering Host
-      SUGCONANZ_RENDERING_HOST_ENDPOINT_URI: "${SUGCONEU_RENDERING_HOST_ENDPOINT_URL}/api/editing/render"
-      SUGCONANZ_RENDERING_HOST_PUBLIC_URI: "https://${SUGCONEU_RENDERING_HOST_ENDPOINT_URL}"
+      SUGCONANZ_RENDERING_HOST_ENDPOINT_URI: "${SUGCONANZ_RENDERING_HOST_ENDPOINT_URL}/api/editing/render"
+      SUGCONANZ_RENDERING_HOST_PUBLIC_URI: "https://${SUGCONANZ_RENDERING_HOST_ENDPOINT_URL}"
       ## Development Environment Optimizations
       SITECORE_DEVELOPMENT_PATCHES: DevEnvOn,CustomErrorsOff,DebugOn,DiagnosticsOff,InitMessagesOff
       Sitecore_AppSettings_exmEnabled:define: "no" # remove to turn on EXM
