@@ -26,7 +26,6 @@ export default async function XMCloudLogin(req, res) {
     .promise()
     .then(
       (result) => {
-        // console.log(result.success);
         sendSuccessMessage(projectId, result.success);
       },
       (err) => {
