@@ -46,6 +46,8 @@ export default function CallbackPage() {
             accessToken,
             `https://${result.link.type}.com/${result.link.org}/${result.link.repo}.git`
           );
+
+          // Setting the local storage
           document.cookie = `vat=${accessToken}`;
           router.push("/configure"); // Redirect to the Router page
         };

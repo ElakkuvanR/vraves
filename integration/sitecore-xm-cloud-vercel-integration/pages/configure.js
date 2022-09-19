@@ -1,11 +1,12 @@
 import { useEffect, useContext, useState } from "react";
-import GithubLogin from "components/githublogin";
+import GithubLogin from "components/git/githublogin";
 import Layout from "components/ui/layout";
-import { useRouter, Router } from "next/router";
+import { useRouter } from "next/router";
 import TokenContext from "store/token-context";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 import useHttp from "hooks/use-http";
 
+// This page communicates with GitRepo and set the ApiUrl to local storage
 export default function ConfigurePage() {
   const ctx = useContext(TokenContext);
   const { sendRequest } = useHttp();
@@ -54,14 +55,14 @@ export default function ConfigurePage() {
   return (
     <Layout>
       <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
-      <div className="space-y-2 text-center">
-        <h1 className="text-lg font-medium">
-          Let us connect your repo in order to deploy to Sitecore XM Cloud
-        </h1>
-        <section className="py-4 flex justify-center">
-          <GithubLogin {...params} />
-        </section>
-      </div>
+        <div className="space-y-2 text-center">
+          <h1 className="text-lg font-medium">
+            Let us connect to your repo in order to deploy to Sitecore XM Cloud
+          </h1>
+          <section className="py-4 flex justify-center">
+            <GithubLogin {...params} />
+          </section>
+        </div>
       </form>
     </Layout>
   );
