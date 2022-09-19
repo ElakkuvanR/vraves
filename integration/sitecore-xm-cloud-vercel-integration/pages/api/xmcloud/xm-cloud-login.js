@@ -1,6 +1,5 @@
 import { PowerShell } from "full-powershell";
 import path from "path";
-import axios from "axios";
 import {
   sendErrorMessage,
   sendSuccessMessage,

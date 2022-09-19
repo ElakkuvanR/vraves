@@ -20,16 +20,16 @@ function MyApp({ Component, pageProps }) {
       channel.bind("logs", function (data) {
         console.log("logs from server--->", data);
         // toast.success(data.type);
-        if(data.message){
+        if(data.message && data.message.length > 0){
           switch (data.type) {
-            // case "error":
-            //   toast.error(data.message);
-            //   break;
-            // case "info":
-            //   toast(data.message, {
-            //     duration: 2500,
-            //   });
-            //   break;
+            case "error":
+              toast.error(data.message);
+              break;
+            case "info":
+              toast(data.message, {
+                duration: 2500,
+              });
+              break;
             case "success":
               toast.success(data.message);
               break;
@@ -60,7 +60,17 @@ function MyApp({ Component, pageProps }) {
       <Component {...pageProps} />
       <div>
         <Toaster
-          position="top-center"          
+          position="top-center"     
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 2500,
+            style: {
+              "max-width": "480px",
+              background: "#363636",
+              color: "#fff",
+            },
+          }}     
         />
       </div>
     </TokenContextProvider>
