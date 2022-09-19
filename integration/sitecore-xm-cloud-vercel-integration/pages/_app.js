@@ -10,28 +10,31 @@ function MyApp({ Component, pageProps }) {
   const pusher = new Pusher(`${process.env.NEXT_PUBLIC_KEY}`, {
     cluster: "eu",
   });
-  let channel;
+  let channel, projectId;
   useEffect(() => {
-    const projectId = localStorage.getItem("projectid");
+    projectId = localStorage.getItem("projectid");
     if (projectId) {
       console.log("Pusher Channel ==>", projectId);
       Pusher.logToConsole = true;
       channel = pusher.subscribe(projectId);
       channel.bind("logs", function (data) {
         console.log("logs from server--->", data);
-        toast.success(data.type);
-        switch (data.type) {
-          case "error":
-            toast.error(data.message);
-            break;
-          case "info":
-            toast(data.message, {
-              duration: 2500,
-            });
-            break;
-          case "success":
-            toast.success(data.message);
-            break;
+        // toast.success(data.type);
+        if(data.message){
+          switch (data.type) {
+            // case "error":
+            //   toast.error(data.message);
+            //   break;
+            // case "info":
+            //   toast(data.message, {
+            //     duration: 2500,
+            //   });
+            //   break;
+            case "success":
+              toast.success(data.message);
+              break;
+          }
+
         }
       });
     }
@@ -49,7 +52,7 @@ function MyApp({ Component, pageProps }) {
       router.events.off("routeChangeStart", handleStart);
       router.events.off("routeChangeComplete", handleStop);
       router.events.off("routeChangeError", handleStop);
-      pusher.unsubscribe(channel);
+      pusher.unsubscribe(projectId);
     };
   }, [router]);
   return (
@@ -57,29 +60,7 @@ function MyApp({ Component, pageProps }) {
       <Component {...pageProps} />
       <div>
         <Toaster
-          position="top-center"
-          reverseOrder={false}
-          gutter={8}
-          containerClassName=""
-          containerStyle={{}}
-          toastOptions={{
-            // Define default options
-            className: "",
-            duration: 5000,
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-
-            // Default options for specific types
-            success: {
-              duration: 3000,
-              theme: {
-                primary: "green",
-                secondary: "black",
-              },
-            },
-          }}
+          position="top-center"          
         />
       </div>
     </TokenContextProvider>
