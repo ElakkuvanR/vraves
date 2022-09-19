@@ -6,6 +6,7 @@ export default async function fetchProjectbyID(req, res) {
   const cookies = new Cookies(req, res);
   const accessToken = req.query.token ?? cookies.get("vat");
   console.log("accesstoken " + accessToken);
+  cookies.set("vat", `${accessToken}`);
   const result = await fetch(
     `https://api.vercel.com/v9/projects/${projectId}`,
     {

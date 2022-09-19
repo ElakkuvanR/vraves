@@ -14,9 +14,9 @@ export default async function createXMCloudEnv(req, res) {
     const powershell = new PowerShell({
       tmp_dir: process.env.PWSH_LOG_FOLDER ?? "C:\\log\\",
       timeout: 12000000,
-      exe_path: 'pwsh'
+      exe_path: "pwsh",
     });
-    console.log(localPath);
+    console.log("create-xm-cloud-env.js ----> localpath: " + localPath);
     const navigate = `Set-Location -Path ${localPath}`;
     await powershell
       .call(navigate, "string")
@@ -30,11 +30,17 @@ export default async function createXMCloudEnv(req, res) {
         }
       );
 
-    //Create env file 
-    fs.copyFile(`${localPath}` + "\\.env.template", `${localPath}` + "\\.env", (err) => {
-      if (err) throw err;
-      console.log('.env file created');
-    });
+    // Create env file
+    fs.copyFile(
+      `${localPath}` + "\\.env.template",
+      `${localPath}` + "\\.env",
+      (err) => {
+        if (err) throw err;
+        console.log(
+          "create-xm-cloud-env.js ----> localpath: .env file created"
+        );
+      }
+    );
 
     if (environmentId === undefined) {
       // Project Create
@@ -46,14 +52,17 @@ export default async function createXMCloudEnv(req, res) {
         .then(
           (result) => {
             environmentCreationPs = result.success?.pop();
-            console.log("environmentCreationPs : " + environmentCreationPs);
+            console.log(
+              "create-xm-cloud-env.js ----> environmentCreationPs : " +
+                environmentCreationPs
+            );
           },
           (err) => {
             console.error(err);
           }
         );
 
-      // // Environment Create
+      // Environment Create
       environmentCreationPs = String(environmentCreationPs)
         .replace("<environment-name>", req.query.environmentName)
         .trim();
@@ -65,7 +74,9 @@ export default async function createXMCloudEnv(req, res) {
         .then(
           (result) => {
             environmentId = extractEnvironmentId(result.success.pop());
-            console.log("environmentId : " + environmentId);
+            console.log(
+              "create-xm-cloud-env.js ----> environmentId : " + environmentId
+            );
           },
           (err) => {
             console.error(err);
@@ -83,10 +94,20 @@ export default async function createXMCloudEnv(req, res) {
       const rootDirectory = req.query.rootDirectory;
       const renderingHost = buildFileJson.renderingHosts;
       for (var key in renderingHost) {
-        console.log("buildjson path", buildFileJson.renderingHosts[key]?.path.toLowerCase());
-        if (buildFileJson.renderingHosts[key]?.path.toLowerCase().indexOf(rootDirectory.toLowerCase()) >= 0) {
+        console.log(
+          "create-xm-cloud-env.js ---->  buildjson path",
+          buildFileJson.renderingHosts[key]?.path.toLowerCase()
+        );
+        if (
+          buildFileJson.renderingHosts[key]?.path
+            .toLowerCase()
+            .indexOf(rootDirectory.toLowerCase()) >= 0
+        ) {
           const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
-          fs.appendFileSync(`${localPath}` + "\\.env", "\n" + `${envVariable}=${domainName}`);
+          fs.appendFileSync(
+            `${localPath}` + "\\.env",
+            "\n" + `${envVariable}=${domainName}`
+          );
         }
       }
     }
@@ -98,7 +119,9 @@ export default async function createXMCloudEnv(req, res) {
       .promise()
       .then(
         (result) => {
-          console.log("Deployment Status : " + result.success);
+          console.log(
+            "create-xm-cloud-env.js ----> Deployment Status : " + result.success
+          );
         },
         (err) => {
           console.error(err);
@@ -112,7 +135,10 @@ export default async function createXMCloudEnv(req, res) {
       .promise()
       .then(
         (result) => {
-          console.log("Connected to the Env : " + result.success);
+          console.log(
+            "create-xm-cloud-env.js ----> Connected to the Env : " +
+              result.success
+          );
         },
         (err) => {
           console.error(err);
@@ -126,7 +152,9 @@ export default async function createXMCloudEnv(req, res) {
       .promise()
       .then(
         (result) => {
-          console.log("edgePushPs Status " + result.success);
+          console.log(
+            "create-xm-cloud-env.js ----> edgePushPs Status " + result.success
+          );
         },
         (err) => {
           console.error(err);
@@ -142,18 +170,21 @@ export default async function createXMCloudEnv(req, res) {
       .promise()
       .then(
         (result) => {
-          accessToken = res.status(200).json(result.success);
+          accessToken = result.success;
         },
         (err) => {
           console.error(err);
         }
       );
 
-    powershell.destroy();
-
-    // console.log("Access Token " + accessToken);
+    console.log(
+      "create-xm-cloud-env.js ----> User Access Token " + accessToken
+    );
+    console.log(
+      `create-xm-cloud-env.js ----> Token API Path ${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`
+    );
     const result = await fetch(
-      `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`,
+      `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token/`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -162,18 +193,26 @@ export default async function createXMCloudEnv(req, res) {
       }
     );
     const body = await result.json();
-    console.log("Edge Access Token " + body.apiKey);
-    const resultEnvVariables = await fetch(`${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${body.apiKey}`, {
-      headers: req.headers
-    });
+    const edgeAccessToken = body.apiKey;
+    console.log(
+      "create-xm-cloud-env.js ---->  Edge Access Token " + body.apiKey
+    );
+    const resultEnvVariables = await fetch(
+      `${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${edgeAccessToken}`,
+      {
+        headers: req.headers,
+      }
+    );
     const varResJson = await resultEnvVariables.json();
     console.log(varResJson);
+    powershell.destroy();
+    res.status(200).json(body);
   } catch (error) {
     console.log(error);
+  } finally {
     //remove cloned project
-    //fs.rmSync(localPath, { recursive: true, force: true });
+    fs.rmSync(localPath, { recursive: true, force: true });
   }
-
 }
 
 function extractEnvironmentId(result) {
@@ -183,4 +222,3 @@ function extractEnvironmentId(result) {
   );
   return subString.replace(/\s/g, "");
 }
-

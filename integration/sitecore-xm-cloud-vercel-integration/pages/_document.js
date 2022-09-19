@@ -11,7 +11,7 @@ class RootDoc extends Document {
           <div id={"globalLoader"}>
             <div className="loader">
               <div className="flex flex-col justify-center items-center h-screen">
-                <div className="w-max">Please hold on !!!</div>
+                <div className="w-max">Please hold on and have some coffee !!!</div>
                 <div className="w-10 h-10 border-b-2 border-gray-900 rounded-full animate-spin"></div>
               </div>
             </div>

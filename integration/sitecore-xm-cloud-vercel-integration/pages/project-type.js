@@ -48,7 +48,6 @@ export default function projectType() {
           </h1>
         </section>
         {!hideLogin && <XMCloudLogin {...loginProps} hideLogin={hideLogin} />}
-
         {hideLogin && (
           <SelectProjectType
             showProjectType={showProjectType}
