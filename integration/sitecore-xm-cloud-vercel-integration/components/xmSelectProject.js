@@ -37,12 +37,12 @@ const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
 
   return (
     <div className="space-y-2 text-center">
-      <h1 className="text-lg font-medium">
+      <h1 className="font-medium w-full uppercase text-center text-4xl sm:text-2xl dark:text-white text-gray-800">
         Please provide below details
       </h1>
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+          <label className="font-bold text-gray-800 md:text-right mb-1 md:mb-0 pr-4">
             Project
           </label>
         </div>
@@ -60,7 +60,7 @@ const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
 
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+          <label className="font-bold text-gray-800 md:text-right mb-1 md:mb-0 pr-4">
             Environment
           </label>
         </div>

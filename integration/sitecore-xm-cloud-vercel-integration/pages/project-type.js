@@ -66,20 +66,20 @@ export default function projectType() {
   return (
     <Layout>
       <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
-        <div className="w-full max-w-2xl divide-y">
-          <section className="py-4 flex items-center space-x-2 justify-center">
-            <h1 className="font-light w-full uppercase text-center text-4xl sm:text-2xl dark:text-white text-gray-800">
-              Setup Sitecore XM Cloud Project
-            </h1>
-          </section>
-          {!hideLogin && <XMCloudLogin {...loginProps} hideLogin={hideLogin} />}
-          {hideLogin && (
-            <SelectProjectType
-              showProjectType={showProjectType}
-              showExistingProjectSelect={showExistingProjectSelect}
-            />
-          )}
-        </div>
+      <div className="bg-setup bg-no-repeat bg-cover bg-center rounded-lg">
+        <section className="py-4 flex items-center space-x-2 justify-center">
+          <h1 className="font-medium w-full uppercase text-center text-4xl sm:text-2xl dark:text-white text-gray-800">
+            Setup Sitecore XM Cloud Project
+          </h1>
+        </section>
+        {!hideLogin && <XMCloudLogin {...loginProps} hideLogin={hideLogin} />}
+        {hideLogin && (
+          <SelectProjectType
+            showProjectType={showProjectType}
+            showExistingProjectSelect={showExistingProjectSelect}
+          />
+        )}
+      </div>
       </form>
     </Layout>
   );
