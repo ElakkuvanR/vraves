@@ -9,19 +9,19 @@ export const pusher = new Pusher({
 });
 
 export default async function handler(req, res) {
-  const { message, status } = req.body;
+  const { message, type } = req.body;
   const projectChannel = req.query.projectid;
   console.log("Inside Pushed");
   console.log(projectChannel);
   console.log({
     message,
-    status,
+    type,
   });
   //const eventName = req.query.eventname;
   //custom trigger to send out event based on specific project channel
   const response = await pusher.trigger(projectChannel, "logs", {
     message,
-    status,
+    type,
   });
 
   res.json({ message: "completed" });

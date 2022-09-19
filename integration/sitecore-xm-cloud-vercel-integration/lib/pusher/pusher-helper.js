@@ -1,14 +1,15 @@
 import axios from "axios";
 
-export function sendErrorMessage(channel, message) {
-    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message:  message, type: "error" });
-
+function sendErrorMessage(channel, message) {
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message: message.toString(), type: "error" });
 }
 
-export function sendInfoMessage(channel, message) {
-    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message:  message, type: "info" });
+function sendInfoMessage(channel, message) {
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message: message.toString(), type: "info" });
 }
 
-export function sendSuccessMessage(channel, message) {
-    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message:  message, type: "success" });
+function sendSuccessMessage(channel, message) {
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${channel}`, { message: message.toString(), type: "success" });
 }
+
+export default { sendErrorMessage, sendInfoMessage, sendSuccessMessage }

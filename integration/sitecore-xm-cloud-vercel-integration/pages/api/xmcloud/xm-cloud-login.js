@@ -1,7 +1,7 @@
 import { PowerShell } from "full-powershell";
 import path from "path";
 import axios from "axios";
-import {sendErrorMessage, sendSuccessMessage , sendInfoMessage} from "../../../lib/pusher/pusher-helper"
+import { sendErrorMessage, sendSuccessMessage, sendInfoMessage } from "../../../lib/pusher/pusher-helper"
 
 export default async function XMCloudLogin(req, res) {
     res.setHeader("Content-Type", "text/html;charset=utf-8");
@@ -47,6 +47,9 @@ export default async function XMCloudLogin(req, res) {
                 console.error(err);
             }
         );
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    await delay(20000);
 
     // Login
     const loginPs = `dotnet sitecore cloud login --client-credentials --client-id ${req.query.clientid} --client-secret ${req.query.clientsecret}`;
