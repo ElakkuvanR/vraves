@@ -1,12 +1,14 @@
 import { PowerShell } from "full-powershell";
 import path from "path";
 import axios from "axios";
+import {sendErrorMessage, sendSuccessMessage , sendInfoMessage} from "../../../lib/pusher/pusher-helper"
 
 export default async function XMCloudLogin(req, res) {
     res.setHeader("Content-Type", "text/html;charset=utf-8");
+    const projectId = req.query.projectid;
     // Navigate to Project Folder
     const localPath = path.resolve(
-        process.env.GITHUB_CLONE_FOLDER + "\\" + req.query.projectid
+        process.env.GITHUB_CLONE_FOLDER + "\\" + projectId
     );
 
     const powershell = new PowerShell({
@@ -22,10 +24,10 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
-                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
+                sendSuccessMessage(projectId, result.success);
             },
             (err) => {
-                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: err, status: "500" });
+                sendErrorMessage(projectId, err);
                 console.error(err);
             }
         );
@@ -38,10 +40,10 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
-                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
+                sendSuccessMessage(projectId, result.success);
             },
             (err) => {
-                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: err, status: "500" });
+                sendErrorMessage(projectId, err);
                 console.error(err);
             }
         );
@@ -54,11 +56,12 @@ export default async function XMCloudLogin(req, res) {
         .then(
             (result) => {
                 console.log(result.success);
-                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
+                sendSuccessMessage(projectId, result.success);
                 return res.status(200).json({ message: "SuccessFully LoggedIn", IsAuthenticated: true });
             },
             (err) => {
                 console.error(err);
+                sendErrorMessage(projectId, err);
                 return res.status(500).json({ message: "SuccessFully LoggedIn", IsAuthenticated: false });
             }
         );
