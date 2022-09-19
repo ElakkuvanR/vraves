@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import useHttp from "hooks/use-http";
 import qs from "querystring";
 
-export default function useVercelProjectDetails() {
+export default function useVercelToken() {
   const [data, setData] = useState({});
   const router = useRouter();
   const { sendRequest, isLoading, error } = useHttp();
