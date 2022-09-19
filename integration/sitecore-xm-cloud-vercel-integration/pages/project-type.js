@@ -40,9 +40,10 @@ export default function projectType() {
 
   return (
     <Layout>
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
       <div className="w-full max-w-2xl divide-y">
         <section className="py-4 flex items-center space-x-2 justify-center">
-          <h1 className="text-lg font-medium">
+          <h1 className="font-light w-full uppercase text-center text-4xl sm:text-2xl dark:text-white text-gray-800">
             Setup Sitecore XM Cloud Project
           </h1>
         </section>
@@ -54,6 +55,7 @@ export default function projectType() {
           />
         )}
       </div>
+      </form>
     </Layout>
   );
 }

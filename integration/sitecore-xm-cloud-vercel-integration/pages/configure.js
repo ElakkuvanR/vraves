@@ -53,6 +53,7 @@ export default function ConfigurePage() {
 
   return (
     <Layout>
+      <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
       <div className="space-y-2 text-center">
         <h1 className="text-lg font-medium">
           Let us connect your repo in order to deploy to Sitecore XM Cloud
@@ -61,6 +62,7 @@ export default function ConfigurePage() {
           <GithubLogin {...params} />
         </section>
       </div>
+      </form>
     </Layout>
   );
 }

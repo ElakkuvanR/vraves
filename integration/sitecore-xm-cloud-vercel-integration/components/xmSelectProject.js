@@ -46,8 +46,8 @@ const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
             Project
           </label>
         </div>
-        <div className="md:w-2/3">
-          <select className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        <div className="md:w-2/4">
+          <select className="block w-52 text-gray-700 py-2 px-3 w-full py-2 px-4  border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
             ref={selectedProject} onChange={handleProjectSelection}>
             {projects.map(project => (
               <option key={project.id} value={project.id}>
@@ -64,8 +64,8 @@ const XMSelectProject = ({ selectedProject, selectedEnvironment }) => {
             Environment
           </label>
         </div>
-        <div className="md:w-2/3">
-          <select className="mt-1 bg-gray-200 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        <div className="md:w-2/4">
+          <select className="block w-52 text-gray-700 py-2 px-3 border border-gray-300 bg-white w-full py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
             ref={selectedEnvironment}>
             {environments.map(environment => (
               <option key={environment.id} value={environment.id}>
