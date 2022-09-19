@@ -54,14 +54,20 @@ export default function ConfigurePage() {
   return (
     <Layout>
       <form className="container max-w-2xl mx-auto shadow-md md:w-3/4">
-      <div className="space-y-2 text-center">
-        <h1 className="text-lg font-medium">
-          Let us connect your repo in order to deploy to Sitecore XM Cloud
-        </h1>
-        <section className="py-4 flex justify-center">
-          <GithubLogin {...params} />
-        </section>
-      </div>
+         <div class="bg-hero bg-no-repeat bg-cover bg-center rounded-lg">
+          <div class="text-start w-1/2 py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
+            <h2 class="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
+              <span className="font-medium w-full uppercase text-center text-4xl sm:text-2xl dark:text-white text-gray-800">
+                Let us connect your repo in order to deploy to Sitecore XM Cloud
+              </span>
+            </h2>
+            <div class="lg:mt-0 lg:flex-shrink-0">
+              <div class="mt-12 inline-flex rounded-md shadow">
+                <GithubLogin {...params} />
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
     </Layout>
   );

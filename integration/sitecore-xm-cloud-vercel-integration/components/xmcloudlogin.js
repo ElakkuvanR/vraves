@@ -9,7 +9,7 @@ const XMCloudLogin = (props, { hideLogin }) => {
                 <div className="space-y-2 text-center">
                     <div className="md:flex md:items-center mb-6">
                         <div className="md:w-1/3">
-                            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+                            <label className="font-light text-gray-800 font-bold md:text-right mb-1 md:mb-0 pr-4">
                                 Client-ID
                             </label>
                         </div>
@@ -24,7 +24,7 @@ const XMCloudLogin = (props, { hideLogin }) => {
                     </div>
                     <div className="md:flex md:items-center mb-6">
                         <div className="md:w-1/3">
-                            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+                            <label className="font-light text-gray-800 font-bold md:text-right mb-1 md:mb-0 pr-4">
                                 Client-Secret
                             </label>
                         </div>
@@ -39,7 +39,7 @@ const XMCloudLogin = (props, { hideLogin }) => {
                     <div className="w-full px-6 pb-6 ml-auto text-gray-500 md:w-1/3">
                     <button
                         onClick={props.login}
-                        className="py-2 px-4  bg-gray-600 hover:bg-gray-800 focus:ring-gray-500 focus:ring-offset-gray-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                        className="py-2 px-4 bg-gray-800 hover:bg-gray-800 focus:ring-gray-800 focus:ring-offset-gray-800 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                         type="button"
                     >
                         Log-in XMCloud

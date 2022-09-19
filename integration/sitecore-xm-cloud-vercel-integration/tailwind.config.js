@@ -5,7 +5,13 @@ module.exports = {
   ],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'hero': "url('/Releasebackground.jpg')",
+        'setup': "url('/setup.jpg')",
+        'selectproject': "url('/selectproj.jpg')",
+      },
+  },
   },
   variants: {
     extend: {},

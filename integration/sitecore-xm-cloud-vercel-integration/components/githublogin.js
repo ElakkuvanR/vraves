@@ -7,7 +7,7 @@ export default function GithubLogin(props) {
   console.log("Github href", `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo&redirect_uri=${REDIRECT_URI}`)
   return (
     <Link href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo&redirect_uri=${REDIRECT_URI}`}>
-          <a className="bg-gray-800 hover:bg-gray-800 text-white px-6 py-1 rounded-md" style={{
+          <a className="py-2 px-4 rounded-lg bg-gray-800 border-2 border-transparent text-white text-md mr-4 hover:bg-gray-800" style={{
       display: props?.status === "logged-in" ? "none" : "inline"
     }}>Authorize Github</a>
     </Link>
