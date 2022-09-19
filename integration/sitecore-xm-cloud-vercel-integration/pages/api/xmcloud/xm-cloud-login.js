@@ -25,6 +25,7 @@ export default async function XMCloudLogin(req, res) {
                 axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
             },
             (err) => {
+                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: err, status: "500" });
                 console.error(err);
             }
         );
@@ -40,6 +41,7 @@ export default async function XMCloudLogin(req, res) {
                 axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: result.success, status: "200" });
             },
             (err) => {
+                axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: err, status: "500" });
                 console.error(err);
             }
         );

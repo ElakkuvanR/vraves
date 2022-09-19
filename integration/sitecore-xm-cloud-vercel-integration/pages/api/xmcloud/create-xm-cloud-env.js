@@ -23,9 +23,11 @@ export default async function createXMCloudEnv(req, res) {
       .promise()
       .then(
         (result) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: "Set-Location to cloned Repo", status: "200" });
           console.log(result.success);
         },
         (err) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: "Set-Location to cloned Repo :: ERROR", status: "500" });
           console.error(err);
         }
       );
@@ -39,10 +41,12 @@ export default async function createXMCloudEnv(req, res) {
         console.log(
           "create-xm-cloud-env.js ----> localpath: .env file created"
         );
+        axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: "Localpath: .env file created", status: "200" });
       }
     );
 
     if (environmentId === undefined) {
+      axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message: "Process ::  Creation of new Project and Environment", status: "200" });
       // Project Create
       const projectCreationPs = `dotnet sitecore cloud project create -n ${req.query.projectname}`;
       let environmentCreationPs;
@@ -56,8 +60,10 @@ export default async function createXMCloudEnv(req, res) {
               "create-xm-cloud-env.js ----> environmentCreationPs : " +
                 environmentCreationPs
             );
+            axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Command : ${projectCreationPs} : ${req.query.projectname} -> Succeeded` , status: "200" });
           },
           (err) => {
+            axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Command :  ${projectCreationPs} : ${req.query.projectname} :: Failed, with error ${err}` , status: "500" });
             console.error(err);
           }
         );
@@ -77,8 +83,11 @@ export default async function createXMCloudEnv(req, res) {
             console.log(
               "create-xm-cloud-env.js ----> environmentId : " + environmentId
             );
+            axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Command : ${environmentCreationPs} :: Succeed, Environment Id --> ${environmentId}` 
+            , status: "200" });
           },
           (err) => {
+            axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Command : ${environmentCreationPs} ${req.query.environmentName} :: Failed, with error ${err}` , status: "500" });
             console.error(err);
           }
         );
@@ -108,12 +117,16 @@ export default async function createXMCloudEnv(req, res) {
             `${localPath}` + "\\.env",
             "\n" + `${envVariable}=${domainName}`
           );
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Adding ENV variable for the Site ${envVariable}=${domainName}` 
+          , status: "200" });
         }
       }
     }
 
     // XM Default Deployment
     const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Deploy will start in a moment:: ${deploymentPs}, Please sit back and sip your coffee. It can take more than 10 mins` 
+          , status: "200" });
     const deloyResult = await powershell
       .call(deploymentPs, "string")
       .promise()
@@ -122,14 +135,19 @@ export default async function createXMCloudEnv(req, res) {
           console.log(
             "create-xm-cloud-env.js ----> Deployment Status : " + result.success
           );
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Executed :: ${deploymentPs}, Succeeded, ${result.success}` 
+          , status: "200" });
         },
         (err) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Executed :: ${deploymentPs}, caused Error ${err}` 
+          , status: "500" });
           console.error(err);
         }
       );
 
     // Connect to the Env
     const connectEnvPs = `dotnet sitecore cloud environment connect -id ${environmentId} --allow-write`;
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Connecting to newly created XM Environment:: ${connectEnvPs}`, status: "200" });
     await powershell
       .call(connectEnvPs, "string")
       .promise()
@@ -139,14 +157,19 @@ export default async function createXMCloudEnv(req, res) {
             "create-xm-cloud-env.js ----> Connected to the Env : " +
               result.success
           );
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Executed :: ${connectEnvPs}, Succeeded` 
+          , status: "200" });
         },
         (err) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Executed :: ${connectEnvPs}, Failed` 
+          , status: "500" });
           console.error(err);
         }
       );
 
     // Publish to Edge
     const edgePushPs = `dotnet sitecore publish --pt Edge -n ${req.query.environmentName}`;
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Starting Publish to Experience Edge:: ${edgePushPs}`, status: "200" });
     await powershell
       .call(edgePushPs, "string")
       .promise()
@@ -155,8 +178,10 @@ export default async function createXMCloudEnv(req, res) {
           console.log(
             "create-xm-cloud-env.js ----> edgePushPs Status " + result.success
           );
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Publish to Experience Edge Completed:: ${result.success}`, status: "200" });
         },
         (err) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Publish to Experience Edge Completed with Error :: ${err}`, status: "500" });
           console.error(err);
         }
       );
@@ -164,6 +189,7 @@ export default async function createXMCloudEnv(req, res) {
     // Create Edge Token
     // The hard-coded path to be removed
     const edgeTokenPs = `(Get-Content "${localPath}\\.sitecore\\user.json" | ConvertFrom-Json).endpoints.xmCloud.accessToken`;
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Creating Experience Edge Token`, status: "200" });
     let accessToken;
     await powershell
       .call(edgeTokenPs, "json")
@@ -171,8 +197,10 @@ export default async function createXMCloudEnv(req, res) {
       .then(
         (result) => {
           accessToken = result.success;
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Creating Experience Edge Token :: SUCCEED`, status: "200" });
         },
         (err) => {
+          axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Creating Experience Edge Token :: Failed ${err}`, status: "500" });
           console.error(err);
         }
       );
@@ -183,6 +211,7 @@ export default async function createXMCloudEnv(req, res) {
     console.log(
       `create-xm-cloud-env.js ----> Token API Path ${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token`
     );
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Fetching Experience Edge Access Token`, status: "200" });
     const result = await fetch(
       `${process.env.XM_CLOUD_DEPLOY_API_URL}api/environments/v1/${environmentId}/obtain-edge-token/`,
       {
@@ -194,6 +223,7 @@ export default async function createXMCloudEnv(req, res) {
     );
     const body = await result.json();
     const edgeAccessToken = body.apiKey;
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Fetching Experience Edge Access Token :: Succeded`, status: "200" });
     console.log(
       "create-xm-cloud-env.js ---->  Edge Access Token " + body.apiKey
     );
@@ -203,6 +233,7 @@ export default async function createXMCloudEnv(req, res) {
         headers: req.headers,
       }
     );
+    axios.post(`${process.env.HOST}/api/pusher?projectid=${req.query.projectid}`, { message:  `Hey ! this the last step - applying env variables in Vercel :: Succeded`, status: "200" });
     const varResJson = await resultEnvVariables.json();
     console.log(varResJson);
     powershell.destroy();
