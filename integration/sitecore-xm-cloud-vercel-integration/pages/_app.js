@@ -9,32 +9,33 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => {
     const projectId = localStorage.getItem("projectid");
-    console.log("Pusher Channel ==>", projectId);
-    Pusher.logToConsole = true;
-    // if (projectId) {
-    const pusher = new Pusher(`${process.env.NEXT_PUBLIC_KEY}`, {
-      cluster: "eu",
-    });
-
-    const channel = pusher.subscribe(projectId);
-
-    channel.bind("logs", function (data) {
-      console.log("logs from server--->", data);
-      switch (data.type) {
-        case "error":
-          toast.error(data.message);
-        case "info":
-          toast(
-            data.message,
-            {
-              duration: 2500,
-            }
-          );
-        case "success":
-          toast.success(data.message);
-      }
-    });
-
+    if(projectId){
+      console.log("Pusher Channel ==>", projectId);
+      Pusher.logToConsole = true;
+      // if (projectId) {
+      const pusher = new Pusher(`${process.env.NEXT_PUBLIC_KEY}`, {
+        cluster: "eu",
+      });
+  
+      const channel = pusher.subscribe(projectId);
+  
+      channel.bind("logs", function (data) {
+        console.log("logs from server--->", data);
+        switch (data.type) {
+          case "error":
+            toast.error(data.message);
+          case "info":
+            toast(
+              data.message,
+              {
+                duration: 2500,
+              }
+            );
+          case "success":
+            toast.success(data.message);
+        }
+      });
+    }
     const handleStart = (url) => {
       console.log(`Loading: ${url}`);
       document.getElementById("globalLoader").style.display = "block";
