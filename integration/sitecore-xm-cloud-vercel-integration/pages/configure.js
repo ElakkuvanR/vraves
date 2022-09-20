@@ -1,11 +1,12 @@
 import { useEffect, useContext, useState } from "react";
-import GithubLogin from "components/githublogin";
+import GithubLogin from "components/git/githublogin";
 import Layout from "components/ui/layout";
-import { useRouter, Router } from "next/router";
+import { useRouter } from "next/router";
 import TokenContext from "store/token-context";
 import setCollectionToLocalStorage from "lib/helpers/set-local-storage";
 import useHttp from "hooks/use-http";
 
+// This page communicates with GitRepo and set the ApiUrl to local storage
 export default function ConfigurePage() {
   const ctx = useContext(TokenContext);
   const { sendRequest } = useHttp();

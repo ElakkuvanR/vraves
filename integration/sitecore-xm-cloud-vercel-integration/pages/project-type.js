@@ -1,37 +1,62 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "components/ui/layout";
-import SelectProjectType from "components/SelectProjectType";
-import XMCloudLogin from "components/xmcloudlogin";
+import SelectProjectType from "components/xm-cloud/select-project-type";
+import XMCloudLogin from "components/xm-cloud/xm-cloud-login";
+import useHttp from "hooks/use-http";
 
+// Handles the XM Cloud Login and fetches the existing projects from XM Cloud
 export default function projectType() {
-  const [showProjectType, setShowProjectType] = React.useState(false);
+  // Hooks initialization
+  const { sendRequest } = useHttp();
+  const [showProjectType, setShowProjectType] = useState(false);
   const [showExistingProjectSelect, setShowExistingProjectSelect] =
-    React.useState(false);
-  const [hideLogin, setHideLogin] = React.useState(false);
+    useState(false);
+  const [hideLogin, setHideLogin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  //Log in XMCloud
+  // Log in XMCloud
   const xmcloudLogin = async (handler) => {
     document.getElementById("globalLoader").style.display = "block";
     const vercelProjectid = localStorage.getItem("projectid");
-    const xmCloudLogin = await fetch(
-      `/api/xmcloud/xm-cloud-login?projectid=${vercelProjectid}&clientid=${loginProps.clientId.current.value}&clientsecret=${loginProps.clientSecret.current.value}`
-    );
-    const loginResponse = await xmCloudLogin.json();
-    if (loginResponse.IsAuthenticated) {
-      console.log(loginResponse);
+
+    // Login callback handler
+    const xmcloudLoginCallback = (result) => {
+      // Sets the necessary state objs
+      console.log(
+        `project-type.js ----> xmcloudLoginCallback: success ${result.IsAuthenticated}`
+      );
+      setIsAuthenticated(result.IsAuthenticated);
       setHideLogin(true);
       setShowProjectType(true);
-      const response = await fetch(
-        `/api/xmcloud/fetch-xm-projects?projectid=${vercelProjectid}`
-      );
-      const data = await response.json();
-      if (data.length >= 1) {
+    };
+    const apiUrl = `${process.env.XM_CLOUD_LOGIN_API_URL}?projectid=${vercelProjectid}&clientid=${loginProps.clientId.current.value}&clientsecret=${loginProps.clientSecret.current.value}`;
+    console.log(`project-type.js ----> apiUrl: ${apiUrl}`);
+    // Invoke fetch
+    sendRequest(
+      {
+        url: apiUrl,
+      },
+      xmcloudLoginCallback
+    ).finally(() => {
+      const fetchProjectUrl = `${process.env.XM_CLOUD_FETCH_PROJECT_API_URL}?projectid=${vercelProjectid}`;
+      console.log(`project-type.js ----> fetchProjectUrl: ${fetchProjectUrl}`);
+      // FetchProjects callback handler
+      const xmcloudFetchProjectCallback = (result) => {
         setShowExistingProjectSelect(true);
-      }
-      document.getElementById("globalLoader").style.display = "none";
-    }
+        console.log(
+          `project-type.js ----> xmcloudFetchProjectCallback: success ${fetchProjectUrl}`
+        );
+        document.getElementById("globalLoader").style.display = "none";
+      };
+      // Invoke fetch
+      sendRequest(
+        {
+          url: fetchProjectUrl,
+        },
+        xmcloudFetchProjectCallback
+      );
+    });
   };
-
   const loginProps = {
     clientId: useRef(),
     clientSecret: useRef(),
