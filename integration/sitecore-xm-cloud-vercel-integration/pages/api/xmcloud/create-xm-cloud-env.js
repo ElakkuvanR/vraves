@@ -14,6 +14,7 @@ export default async function createXMCloudEnv(req, res) {
     process.env.GITHUB_CLONE_FOLDER + "\\" + req.query.projectid
   );
   let environmentId = req.query.environmentId;
+  const projectId = req.query.projectid;
   try {
     const powershell = new PowerShell({
       tmp_dir: process.env.PWSH_LOG_FOLDER ?? "C:\\log\\",

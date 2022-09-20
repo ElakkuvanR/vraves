@@ -64,11 +64,17 @@ function MyApp({ Component, pageProps }) {
           toastOptions={{
             // Define default options
             className: "",
-            duration: 2500,
+            duration: 10000,
             style: {
               "max-width": "480px",
               background: "#363636",
               color: "#fff",
+            },
+            success: {
+              duration: 5000
+            },
+            error: {
+              duration: 5000
             },
           }}     
         />
