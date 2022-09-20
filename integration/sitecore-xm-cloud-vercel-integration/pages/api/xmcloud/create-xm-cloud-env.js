@@ -123,21 +123,31 @@ export default async function createXMCloudEnv(req, res) {
               .indexOf(rootDirectory.toLowerCase()) >= 0
           ) {
             const envVariable = `${key.toUpperCase()}_RENDERING_HOST_ENDPOINT_URL`;
-            fs.appendFileSync(
-              `${localPath}` + "\\.env",
-              "\n" + `${envVariable}=${domainName}`
-            );
+            // fs.appendFileSync(
+            //   `${localPath}` + "\\.env",
+            //   "\n" + `${envVariable}=${domainName}`
+            // );
+            // fs.closeSync(appFile, (err) => {
+            //   if (err)
+            //     console.error('Failed to close file', err);
+            //   else {
+            //     console.log("\n> Env File Closed successfully");
+            //   }
+            // });
             sendInfoMessage(projectId, `Adding ENV variable for the Site ${envVariable}=${domainName}`);
           }
         }
       }
-
       // Update the Jss Editing Secret
       console.log(
         "create-xm-cloud-env.js ----> jssEditingSecret : " + editingSecret
       );
       sendInfoMessage(projectId, `Updating JSS Editing secret in ENV file.`);
       fs.readFile(`${localPath}` + "\\.env", "utf-8", (err, contents) => {
+        if (err) {
+          console.log("WriteFile error:", err);
+          return;
+        }
         // Replace string occurrences
         const updatedEnvContent = contents.replace(
           /JSS_EDITING_SECRET=/gi,
@@ -148,9 +158,11 @@ export default async function createXMCloudEnv(req, res) {
           `${localPath}` + "\\.env",
           updatedEnvContent,
           "utf-8",
-          (err2) => { }
+          (err2) => { console.log("WriteFile error:", err2); }
         );
       });
+
+
 
       // XM Default Deployment
       const deploymentPs = `dotnet sitecore cloud deployment create --environment-id ${environmentId} --upload --json`;
@@ -252,7 +264,7 @@ export default async function createXMCloudEnv(req, res) {
         "create-xm-cloud-env.js ---->  Edge Access Token " + body.apiKey
       );
       const resultEnvVariables = await fetch(
-        `${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=""&SitecoreApiKey=${edgeAccessToken}`,
+        `${process.env.HOST}/api/vercel/create-xmcloud-env-variable-for-project?projectId=${req.query.projectid}&JSSEditingSecret=${editingSecret}&SitecoreApiKey=${edgeAccessToken}`,
         {
           headers: req.headers,
         }
