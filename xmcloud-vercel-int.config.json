@@ -1,0 +1,19 @@
+{
+    "customSettings": {
+        "jssEditingSecretConfigPath": "./src/Environment/platform/App_config/Include/Environments"
+    },
+    "renderingHosts": {
+        "sugconanz": {
+            "path": "./src/Project/Sugcon/SugconAnzSxa",
+            "siteSettingItem": "./src/Project/Sugcon/items/content/Sugcon/SugconAnzSxa/Settings.yml",
+            "siteUrlToReplace": "http://sugconanz:3000",
+            "type": "sxa"
+        },
+        "sugconeu": {
+            "path": "./src/Project/Sugcon/SugconEuSxa",
+            "siteSettingItem": "./src/Project/Sugcon/items/content/Sugcon/SugconEuSxa/Settings.yml",
+            "siteUrlToReplace": "http://sugconeu:3000",
+            "type": "sxa"
+        }
+    }
+}
