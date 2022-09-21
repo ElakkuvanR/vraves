@@ -1,6 +1,6 @@
 {
     "customSettings": {
-        "jssEditingSecretConfigPath": "/src/Environment/platform/App_config/Include/Environments"
+        "jssEditingSecretConfigPath": "/src/Environment/platform/App_config/Include/zzz"
     },
     "renderingHosts": {
         "sugconanz": {
